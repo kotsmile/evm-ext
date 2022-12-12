@@ -74,7 +74,7 @@ export const useWallet_config = (config: EvmConfig) => {
 
       state.wallet.chainId = chainId ?? state.wallet.chainId
 
-      await this.loadAll({ init: true, login: true })
+      await THIS(config).loadAll({ init: true, login: true })
     },
     async loadAll({ init = true, login = true }: { init?: boolean; login?: boolean }) {
       const { emit } = useEvents_config(config)()
