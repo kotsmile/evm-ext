@@ -1,0 +1,59 @@
+{
+  "name": "evm-ext",
+  "version": "0.0.15-a",
+  "description": "Tool for interacting with EVM-compliant blockchains and blockchain contracts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kotsmile/blockchain-tools.git"
+  },
+  "bin": {
+    "evm-ext": "lib/bin/index.js"
+  },
+  "keywords": [
+    "js",
+    "ts",
+    "dapp",
+    "evm",
+    "blockchain",
+    "smartcontracts",
+    "ethers"
+  ],
+  "author": "kotsmile",
+  "scripts": {
+    "dev": "tsc -w",
+    "test": "ts-mocha src/__tests__/**/*.test.ts",
+    "test:bin": "echo 'Not implemented'",
+    "type": "tsc --noEmit",
+    "build": "rm -rf ./lib && tsc",
+    "format": "prettier --write \"./src/**/*.{js,ts,jsx,tsx,vue}\"",
+    "lint": "prettier --check \"./src/**/*.{js,ts,jsx,tsx,vue}\"",
+    "bin:run": "yarn build && node ./lib/bin/index.js",
+    "prepare": "yarn type && yarn test && yarn lint && yarn build"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@coinbase/wallet-sdk": "^3.6.2",
+    "@walletconnect/web3-provider": "^1.8.0",
+    "chalk": "4.1.2",
+    "commander": "^9.2.0",
+    "ethers": "5.5.3",
+    "figlet": "^1.5.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/commander": "2.12.2",
+    "@types/figlet": "1.5.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.11.13",
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0",
+    "prettier": "2.8.1",
+    "ts-mocha": "^10.0.0",
+    "typescript": "4.9.4"
+  }
+}
