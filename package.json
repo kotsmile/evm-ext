@@ -1,6 +1,6 @@
 {
   "name": "evm-ext",
-  "version": "0.0.15-a",
+  "version": "0.0.16-a",
   "description": "Tool for interacting with EVM-compliant blockchains and blockchain contracts",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
