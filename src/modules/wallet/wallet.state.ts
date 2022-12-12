@@ -60,12 +60,12 @@ export const useWallet_config = (config: EvmConfig) => {
         THIS(config).updateStoreState,
         (wallet) => {
           useEvents().emit('onWalletChange', { wallet })
-          if (config.options?.updateOnWalletChange) this.loadAll({ login: true })
+          if (config.options?.updateOnWalletChange) THIS(config).loadAll({ login: true })
         },
         (chainId) => {
           useEvents().emit('onChainChange', { chainId, natural: true })
           if (config.options?.updateOnChainChange)
-            this.loadAll({ init: true, login: true })
+            THIS(config).loadAll({ init: true, login: true })
         }
       )
 
