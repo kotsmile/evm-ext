@@ -141,7 +141,7 @@ connect('metamask')
 ```
 
 All information about user connection will be saved in state of package
-For example for `vue3` state is `pinia` stores
+For example for [`vue3`](https://www.npmjs.com/package/vue) state is [`pinia`](https://www.npmjs.com/package/pinia) stores
 
 ## Contract Interaction
 
