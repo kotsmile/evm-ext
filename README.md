@@ -4,7 +4,7 @@
 
 ## Example of Usage
 
-- [`vue3-evm-app`](https://github.com/kotsmile/blockchain-tools/tree/main/examples/vue3-evm-app)
+- [`vue3-evm-app`](https://github.com/kotsmile/examples-evm-ext)
 
 ## What is it for ?
 
