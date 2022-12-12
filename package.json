@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kotsmile/blockchain-tools.git"
+    "url": "git+https://github.com/kotsmile/evm-ext.git"
   },
   "bin": {
     "evm-ext": "lib/bin/index.js"
