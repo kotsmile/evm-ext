@@ -12,16 +12,17 @@ import contracts_module, { init as initContracts } from '../modules/contracts'
 import events_module, { init as initEvents } from '../modules/events'
 import chain_module, { init as initChain } from '../modules/chain'
 import store_module, { init as initStore } from '../modules/store'
-import wallet_module, { init as initWallet } from '../modules/wallet'
+import wallet_module, { init as initWallet, WalletsDefintion } from '../modules/wallet'
 
 export const defineEvmConfig = <
   ContractsJSON extends ContractsJSONStruct,
   ChainIds extends AppChainIds<ContractsJSON>,
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>,
-  Stores extends StoresDefinition
+  Stores extends StoresDefinition,
+  Wallets extends WalletsDefintion
 >(
-  config: EvmConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts, Stores>
+  config: EvmConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts, Stores, Wallets>
 ) => {
   return () => ({
     init: async () => {
