@@ -27,6 +27,7 @@ npx evm-ext init -p ./src/evm.config.ts
 
 ```typescript
 import { defineEvmConfig, modules, utils } from 'evm-ext'
+import { wallets } from 'evm-ext-wallets'
 
 import type { Token, Staking } from './contracts/typechain'
 import contractsJSON from './contracts/contracts.json'
@@ -66,6 +67,8 @@ export const useEvm = defineEvmConfig({
       },
     },
   },
+  /// supported wallets for app
+  wallets,
   /// objects which will be triggered on specific lifecycles
   stores: {},
   /// adapter for connection `evm-ext` to different frameworks and environments

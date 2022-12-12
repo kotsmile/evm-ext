@@ -6,12 +6,13 @@ import type { UpdateParams, WalletHandler } from './wallets/base'
 
 import state_module from '../state'
 
-import { wallets } from './wallets'
-import type { WalletType } from './wallets'
-
 import { useEvents_config } from '../events/event.state'
 import type { Bytes } from 'ethers'
-import { log } from './utils'
+import { log, warn } from './utils'
+import type { ContractsJSONStruct } from '../contracts'
+import type { StoresDefinition } from '../store'
+import type { WalletsDefintion } from './type'
+import type { Cast } from '../../utils/type'
 
 export type WalletState = {
   wallet: {
@@ -23,14 +24,16 @@ export type WalletState = {
     DEFAULT_CHAINID: ChainId
     login: boolean
     loading: boolean
-    walletType: WalletType | null
+    walletType: string | null
     walletHandler: Wrap<WalletHandler | null>
   }
 }
 
 const THIS = (config: EvmConfig) => useWallet_config(config)()
 
-export const useWallet_config = (config: EvmConfig) => {
+export const useWallet_config = <Wallets extends WalletsDefintion>(
+  config: EvmConfig<ContractsJSONStruct, any, any, any, StoresDefinition, Wallets>
+) => {
   return () => ({
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {
       if (!wallet || !chainId) return
@@ -42,10 +45,12 @@ export const useWallet_config = (config: EvmConfig) => {
       state.wallet.realChainId = chainId as ChainId
       state.wallet.login = login
     },
-    async connect(walletType: WalletType | null, chainId?: ChainId) {
-      log(`Connect to "${walletType}"`, config)
-
+    async connect(walletType: Cast<keyof Wallets | null, string>, chainId?: ChainId) {
+      const { wallets } = config
+      if (!wallets) return warn('No wallets provided', config)
       if (!walletType) return
+
+      log(`Connect to "${walletType}"`, config)
 
       const useEvents = useEvents_config(config)
 

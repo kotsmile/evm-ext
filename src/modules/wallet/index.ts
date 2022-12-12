@@ -19,5 +19,4 @@ export type {
   WalletHandler,
 } from './wallets/base'
 
-export type { WalletType } from './wallets'
-export { wallets } from './wallets'
+export type { WalletsDefintion, Options } from './type'
