@@ -5,11 +5,11 @@ import { getChainTag } from '../../utils/chain'
 
 import type { EvmConfig } from '../../config/type'
 
-import { warn } from './utils'
+import { logger } from './utils'
 
 export const getRpc_config = <C extends EvmConfig>(config: C) => {
   if (!config.rpc) {
-    warn('No rpc function in config', config)
+    logger.warn('No rpc function in config')
     return () => '__NO_RCP__'
   }
   return (chainId: ChainId) => config.rpc?.(getChainTag(chainId)) ?? '__NO_RPC__'

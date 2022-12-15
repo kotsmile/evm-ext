@@ -19,15 +19,15 @@ const useEvm = defineEvmConfig({
   adapter: mockAdapter,
 })
 
-const { useContracts } = useEvm()
-const {} = useContracts()
+// const { useContracts } = useEvm()
+// const {} = useContracts()
 
-type F<C extends '1' | '2' = any> = {
-  readonly c: C
-}
+// type F<C extends '1' | '2' = any> = {
+//   readonly c: C
+// }
 
-const a = <CE extends '1' | '2', FE extends F<CE>>(fe: FE) => fe
+// const a = <CE extends '1' | '2', FE extends F<CE>>(fe: FE) => fe
 
-a({
-  c: '',
-})
+// a({
+//   c: '',
+// })

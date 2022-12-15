@@ -1,5 +1,5 @@
-import { generateLog } from '../../utils'
+import { createLogger } from '../../utils'
 
 export const contractType = <C>(): C => ({} as C)
 
-export const { log, error, warn } = generateLog('[Contracts Module]', '#CCCC11')
+export const logger = createLogger('Contracts Module')

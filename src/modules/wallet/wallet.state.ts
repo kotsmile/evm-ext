@@ -8,7 +8,7 @@ import state_module from '../state'
 
 import { useEvents_config } from '../events/event.state'
 import type { Bytes } from 'ethers'
-import { log, warn } from './utils'
+import { logger } from './utils'
 import type { ContractsJSONStruct } from '../contracts'
 import type { StoresDefinition } from '../store'
 import type { WalletsDefintion } from './type'
@@ -47,10 +47,10 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
     },
     async connect(walletType: Cast<keyof Wallets | null, string>, chainId?: ChainId) {
       const { wallets } = config
-      if (!wallets) return warn('No wallets provided', config)
+      if (!wallets) return logger.warn('No wallets provided')
       if (!walletType) return
 
-      log(`Connect to "${walletType}"`, config)
+      logger.info(`Connect to "${walletType}"`)
 
       const useEvents = useEvents_config(config)
 

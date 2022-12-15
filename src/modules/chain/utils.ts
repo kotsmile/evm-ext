@@ -1,2 +1,2 @@
-import { generateLog } from '../../utils'
-export const { log, warn, error } = generateLog('[Chain Module]', '#A12223')
+import { createLogger } from '../../utils'
+export const logger = createLogger('Chain Module')

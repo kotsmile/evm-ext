@@ -16,7 +16,7 @@ import type {
 } from './type'
 
 import { getProvider_config } from '../chain/node'
-import { warn } from './utils'
+import { logger } from './utils'
 
 export type DefaultContract<T, D> = T extends undefined ? D : T
 
@@ -67,14 +67,14 @@ export const useContracts_config = <
 ) => {
   return (signer?: INotNullSigner) => {
     if (!config.DEFAULT_CHAINID) {
-      warn('No `DEFAULT_CHAINID` in config', config)
+      logger.warn('No `DEFAULT_CHAINID` in config')
       return {} as UseContracts<Contracts['shared'], ChainIds[number]>
     }
 
     const chainId = config.DEFAULT_CHAINID // TODO: get actual chainId from web3 store like
 
     if (!config.contractsJSON) {
-      warn('No `contractsJSON` in config', config)
+      logger.warn('No `contractsJSON` in config')
       return {} as UseContracts<Contracts['shared'], ChainIds[number]>
     }
 
@@ -104,7 +104,7 @@ export const useContractsOnChain_config = <
     signer?: INotNullSigner
   ) => {
     if (!config.contractsJSON) {
-      warn('No `contractsJSON` in config', config)
+      logger.warn('No `contractsJSON` in config')
       return {} as UseContracts<
         Cast<
           Contracts['on'][CurrentChainId],

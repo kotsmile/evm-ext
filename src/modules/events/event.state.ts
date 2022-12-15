@@ -84,7 +84,7 @@ export const useEvents_config = (config: EvmConfig) => {
           })
       )
 
-      emitMsg(event, args, listenersTriggered, config)
+      emitMsg(event, args, listenersTriggered)
       removeIds.forEach(THIS(config).removeListener)
     },
   })

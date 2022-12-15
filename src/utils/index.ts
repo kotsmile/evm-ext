@@ -54,27 +54,30 @@ function padZero(str: string, len = 2) {
   return (zeros + str).slice(-len)
 }
 
-export const generateLog = (label: string, colorHex: string) => {
-  const log = (message: any, config?: EvmConfig) => {
-    if (!config?.DEBUG) return
+export type LogType = 'info' | 'warn' | 'error'
+export type LogFunction = (msg: string) => any
+
+let isLoggerEnabled = true
+
+export const disableLogger = () => (isLoggerEnabled = false)
+export const enableLogger = () => (isLoggerEnabled = true)
+
+export const createLogger = (label: string): Record<LogType, LogFunction> => {
+  const info = (message: any) =>
+    isLoggerEnabled &&
     console.log(
-      `%c${label} ${message}`,
+      `%c[${label}] ${message}`,
       `
-      color: ${invertColor(colorHex)}; 
-      background: ${colorHex}; 
+      color: #111111; 
+      background: #AAAAAA; 
       font-weight: bold;
     `
     )
-  }
-  const warn = (message: any, config?: EvmConfig) => {
-    if (!config?.DEBUG) return
-    console.warn(`${label} ${message}`)
-  }
-  const error = (message: any, config?: EvmConfig) => {
-    if (!config?.DEBUG) return
-    console.error(`${label} ${message}`)
-  }
-  return { log, warn, error }
+  const warn = (message: any) => isLoggerEnabled && console.warn(`[${label}] ${message}`)
+  const error = (message: any) =>
+    isLoggerEnabled && console.error(`[${label}] ${message}`)
+
+  return { info, warn, error }
 }
 
 export const defaultValue = <T>(v: T | undefined, value: T): T => v ?? value
