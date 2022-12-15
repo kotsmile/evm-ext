@@ -1,6 +1,6 @@
 import type { EvmConfig, Module } from '../../config/type'
 import type { ContractsJSONStruct, AppChainIds, ContractsDefinition } from './type'
-import { logger } from './utils'
+import { debugInfo, logger } from './utils'
 
 import { useContractsOnChain_config, useContracts_config } from './use'
 
@@ -17,6 +17,11 @@ export default {
       useContracts: useContracts_config(config),
       useContractsOnChain: useContractsOnChain_config(config),
     }
+  },
+  init: async (config) => {
+    logger.info('List of contracts')
+    debugInfo(config)
+    return true
   },
 } satisfies Module
 
