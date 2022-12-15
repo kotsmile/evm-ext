@@ -3,7 +3,7 @@ import type { Events, CallbackFunction, EventType, Filter, RawEventType } from '
 
 import { emitMsg, toAfterEvent, toBeforeEvent } from './utils'
 
-import state_module from '../state'
+import { useState } from '../state'
 
 export type EventsState = {
   events: {
@@ -42,7 +42,7 @@ export const useEvents_config = (config: EvmConfig) => {
       await THIS(config)._emit(toAfterEvent(event), args)
     },
     removeListener(listenerId: number) {
-      const state = state_module(config)
+      const state = useState(config)
       state.events.listeners =
         state.events.listeners?.filter((l) => l.id !== listenerId) ?? []
     },
@@ -52,7 +52,7 @@ export const useEvents_config = (config: EvmConfig) => {
       filters: Filter<Event>[] = [],
       once = false
     ): number {
-      const state = state_module(config)
+      const state = useState(config)
 
       const listenerId = state.events.listenerId++
       state.events.listeners.push({
@@ -65,7 +65,7 @@ export const useEvents_config = (config: EvmConfig) => {
       return listenerId
     },
     async _emit<Event extends EventType>(event: Event, args: Events[Event]['args']) {
-      const state = state_module(config)
+      const state = useState(config)
 
       const removeIds: number[] = []
       const listeners = state.events.listeners

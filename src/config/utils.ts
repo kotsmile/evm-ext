@@ -1,2 +1,2 @@
 import { createLogger } from '../utils'
-export const { info, warn, error } = createLogger('Config')
+export const logger = createLogger('Config')

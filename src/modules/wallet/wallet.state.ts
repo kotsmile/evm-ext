@@ -4,7 +4,7 @@ import type { ChainId } from '../../utils/chain'
 
 import type { UpdateParams, WalletHandler } from './wallets/base'
 
-import state_module from '../state'
+import { useState } from '../state'
 
 import { useEvents_config } from '../events/event.state'
 import type { Bytes } from 'ethers'
@@ -38,7 +38,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {
       if (!wallet || !chainId) return
 
-      const state = state_module(config)
+      const state = useState(config)
 
       state.wallet.signer = wrap(signer)
       state.wallet.wallet = wallet
@@ -54,7 +54,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
 
       const useEvents = useEvents_config(config)
 
-      const state = state_module(config)
+      const state = useState(config)
       const whClass = unwrap(state.wallet.walletHandler)
       if (whClass) whClass?.clear()
 
@@ -90,7 +90,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       await emit('final', {})
     },
     async signMessage(data: string | Bytes): Promise<string | null> {
-      const state = state_module(config)
+      const state = useState(config)
 
       if (state.wallet.login) {
         const signedMessage = await safeRead<string | null>(
@@ -103,7 +103,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
     },
     async switchChain(chainId: ChainId): Promise<boolean> {
       const { emit } = useEvents_config(config)()
-      const state = state_module(config)
+      const state = useState(config)
 
       const result = Boolean(
         await unwrap(state.wallet.walletHandler)?.switchChain(chainId)
@@ -113,7 +113,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
     },
     async disconnect(): Promise<boolean> {
       const { _emit } = useEvents_config(config)()
-      const state = state_module(config)
+      const state = useState(config)
 
       await _emit('beforeLogout', {})
       state.wallet.login = false

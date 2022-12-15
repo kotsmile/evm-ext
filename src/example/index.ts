@@ -19,8 +19,9 @@ const useEvm = defineEvmConfig({
   adapter: mockAdapter,
 })
 
-// const { useContracts } = useEvm()
-// const {} = useContracts()
+const { useContracts, useContractsOnChain, useEvents, getRpc, getProvider } = useEvm()
+
+const { token } = useContracts()
 
 // type F<C extends '1' | '2' = any> = {
 //   readonly c: C

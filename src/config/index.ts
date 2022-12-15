@@ -5,15 +5,12 @@ import type {
 } from '../modules/contracts/type'
 import type { StoresDefinition } from '../modules/store/type'
 import type { WalletsDefintion } from '../modules/wallet/type'
-import type { EvmConfig } from './type'
+import type { EvmConfig, Module } from './type'
 
-import { info } from './utils'
+import { keyOf } from '../utils'
+import { logger } from './utils'
 
-// import contracts_module, { init as initContracts } from '../modules/contracts'
-// import events_module, { init as initEvents } from '../modules/events'
-// import chain_module, { init as initChain } from '../modules/chain'
-// import store_module, { init as initStore } from '../modules/store'
-// import wallet_module, { init as initWallet, WalletsDefintion } from '../modules/wallet'
+import modules from '../modules'
 
 export const defineEvmConfig = <
   ContractsJSON extends ContractsJSONStruct,
@@ -27,18 +24,28 @@ export const defineEvmConfig = <
 ) => {
   return () => ({
     init: async () => {
-      // log('Init modules', config)
-      // await initContracts(config)
-      // await initChain(config)
-      // await initWallet(config)
-      // await initEvents(config)
-      // await initStore(config)
+      logger.info('Init modules')
+
+      const defered: Module[] = []
+      const modules_: Record<string, Module> = modules
+
+      for (const name of keyOf(modules_)) {
+        const module = modules_[name]
+        if (module.defer) {
+          defered.push(module)
+          continue
+        }
+        await module.init?.(config)
+      }
+
+      for (const module of defered) await module.init?.(config)
     },
     config,
-    // ...contracts_module(config),
-    // ...events_module(config),
-    // ...chain_module(config),
-    // ...store_module(config),
-    // ...wallet_module(config),
+    ...modules.contracts.tools(config),
+    ...modules.events.tools(config),
+    ...modules.chain.tools(config),
+    ...modules.state.tools(config),
+    // ...modules.store.tools(config),
+    ...modules.wallet.tools(config),
   })
 }

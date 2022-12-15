@@ -32,3 +32,12 @@ export type EvmConfig<
   options?: Options
   DEBUG?: boolean
 }
+
+export type InitFunction = (config: EvmConfig) => Promise<boolean>
+export type ToolsFunction = (config: EvmConfig) => any
+
+export type Module = {
+  tools?: ToolsFunction
+  init?: InitFunction
+  defer?: boolean
+}

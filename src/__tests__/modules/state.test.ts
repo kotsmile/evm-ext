@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { defineEvmConfig } from '../../config'
 
-import state_config from '../../modules/state'
+import { useState } from '../../modules/state'
 import type { State } from '../../modules/state'
 
 import type { Adapter } from '../../adapter'
@@ -36,7 +36,7 @@ describe('State module', () => {
       })
   )
   it('should set value', () => {
-    const state = state_config(testConfig)
+    const state = useState(testConfig)
 
     const n = 'wallet'
     const k = 'wallet'
@@ -46,7 +46,7 @@ describe('State module', () => {
     expect(testState[n][k]).eq(v)
   })
   it('should get value', () => {
-    const state = state_config(testConfig)
+    const state = useState(testConfig)
 
     const n = 'wallet'
     const k = 'wallet'

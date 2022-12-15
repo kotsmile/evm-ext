@@ -1,7 +1,11 @@
-import type { EvmConfig } from '../../config/type'
+import type { EvmConfig, Module } from '../../config/type'
 
-export default (config: EvmConfig) => {
-  return config.adapter().state
-}
+const main = {
+  tools: (config: EvmConfig) => {
+    return config.adapter().state
+  },
+} satisfies Module
+export default main
 
+export const useState = main.tools
 export type { State, Namespace, Key, Value } from './schema'
