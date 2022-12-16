@@ -1,7 +1,5 @@
-import type { EvmConfig } from '../config/type'
-
-export * as rpc from './chain/rpc'
-export * as chain from './chain'
+export * as rpc from '@/utils/chain/rpc'
+export * as chain from '@/utils/chain'
 export type { INotNullSigner, ISigner } from './chain/type'
 export { safe, safeRead, safeWrite } from './safe'
 

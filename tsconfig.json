@@ -13,6 +13,11 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "preserveValueImports": false,
-    "importsNotUsedAsValues": "error"
+    "importsNotUsedAsValues": "error",
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }

@@ -1,5 +1,5 @@
-import type { RpcDefinition } from '../../modules/chain/type'
-import { extraRpcs, type ChainTag } from './index'
+import type { RpcDefinition } from '@/modules/chain/type'
+import { extraRpcs, type ChainTag } from '@/utils/chain'
 
 export const ankrRpc = (): RpcDefinition => {
   const ankrPath: Partial<Record<ChainTag, string>> = {
