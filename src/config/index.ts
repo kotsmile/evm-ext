@@ -1,16 +1,16 @@
+import modules from '@/modules'
 import type {
   ContractsJSONStruct,
   ContractsDefinition,
   AppChainIds,
-} from '../modules/contracts/type'
-import type { StoresDefinition } from '../modules/store/type'
-import type { WalletsDefintion } from '../modules/wallet/type'
-import type { EvmConfig, Module } from './type'
+} from '@/modules/contracts/type'
+import type { StoresDefinition } from '@/modules/store/type'
+import type { WalletsDefintion } from '@/modules/wallet/type'
 
-import { keyOf } from '../utils'
-import { logger } from './utils'
+import type { EvmConfig, Module } from '@/config/type'
+import { logger } from '@/config/utils'
 
-import modules from '../modules'
+import { keyOf } from '@/utils'
 
 export const defineEvmConfig = <
   ContractsJSON extends ContractsJSONStruct,

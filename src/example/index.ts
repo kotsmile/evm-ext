@@ -1,7 +1,6 @@
-import { sha256 } from 'ethers/lib/utils'
-import { defineEvmConfig } from '../config'
-import { mockAdapter, mockContractsJSON, type MockContract } from '../mocks'
-import { contractType } from '../modules/contracts'
+import { defineEvmConfig } from '@/config'
+import { mockAdapter, mockContractsJSON, type MockContract } from '@/mocks'
+import { contractType } from '@/modules/contracts'
 
 const useEvm = defineEvmConfig({
   contractsJSON: mockContractsJSON,

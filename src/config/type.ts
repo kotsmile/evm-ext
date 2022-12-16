@@ -2,11 +2,12 @@ import type {
   ContractsJSONStruct,
   ContractsDefinition,
   AppChainIds,
-} from '../modules/contracts/type'
-import type { StoresDefinition } from '../modules/store/type'
-import type { RpcDefinition } from '../modules/chain/type'
-import type { Adapter } from '../adapter'
-import type { Options, WalletsDefintion } from '../modules/wallet'
+} from '@/modules/contracts/type'
+import type { StoresDefinition } from '@/modules/store/type'
+import type { RpcDefinition } from '@/modules/chain/type'
+import type { Options, WalletsDefintion } from '@/modules/wallet'
+
+import type { Adapter } from '@/adapter'
 
 export type EvmConfig<
   ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,

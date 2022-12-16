@@ -1,6 +1,6 @@
 import { Command } from 'commander'
 
-import initCommand from './commands/init'
+import initCommand from '@/bin/commands/init'
 
 const program = new Command()
 program

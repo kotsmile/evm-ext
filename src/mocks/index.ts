@@ -1,7 +1,8 @@
 import type { BaseContract } from 'ethers'
-import type { adapter } from '..'
-import type { ContractsJSONStruct } from '../modules/contracts'
-import { wrap } from '../utils'
+
+import type { adapter } from '@/index'
+import type { ContractsJSONStruct } from '@/modules/contracts'
+import { wrap } from '@/utils'
 
 export const mockAdapter: adapter.Adapter = () => ({
   state: {
