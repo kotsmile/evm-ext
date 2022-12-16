@@ -1,6 +1,6 @@
-import type { EvmConfig, Module } from '../../config/type'
+import type { EvmConfig, Module } from '@/config/type'
 
-import { getRpc_config, getProvider_config } from './node'
+import { getRpc_config, getProvider_config } from '@/modules/chain/node'
 
 export default {
   tools: (config: EvmConfig) => {

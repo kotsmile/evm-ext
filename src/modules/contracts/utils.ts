@@ -1,10 +1,11 @@
 import { ethers } from 'ethers'
-import type { EvmConfig } from '../../config/type'
-import { createLogger } from '../../utils'
-import { getRpc_config } from '../chain/node'
+
+import { createLogger } from '@/utils'
+import type { EvmConfig } from '@/config/type'
+
+import { getRpc_config } from '@/modules/chain/node'
 
 export const contractType = <C>(): C => ({} as C)
-
 export const logger = createLogger('Contracts Module')
 
 export const getContracts = (config: EvmConfig) => {

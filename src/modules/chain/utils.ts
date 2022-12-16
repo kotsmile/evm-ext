@@ -1,2 +1,2 @@
-import { createLogger } from '../../utils'
+import { createLogger } from '@/utils'
 export const logger = createLogger('Chain Module')

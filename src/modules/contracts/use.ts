@@ -1,21 +1,20 @@
 import { Contract, type BaseContract } from 'ethers'
 
-import type { EvmConfig } from '../../config/type'
+import type { EvmConfig } from '@/config/type'
 
-import type { INotNullSigner } from '../../utils/chain/type'
-import type { ChainId } from '../../utils/chain'
-
-import type { Cast } from '../../utils/type'
-import { keyOf } from '../../utils'
+import type { INotNullSigner } from '@/utils/chain/type'
+import type { ChainId } from '@/utils/chain'
+import type { Cast } from '@/utils/type'
+import { keyOf } from '@/utils'
 
 import type {
   AppChainIds,
   ContractsJSONStruct,
   ContractsDefinition,
   ContractDefinition,
-} from './type'
+} from '@/modules/contracts/type'
 
-import { getProvider_config } from '../chain/node'
+import { getProvider_config } from '@/modules/chain/node'
 import { logger } from './utils'
 
 export type DefaultContract<T, D> = T extends undefined ? D : T
