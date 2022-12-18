@@ -1,9 +1,10 @@
-import type { Module } from '../../config/type'
+import type { Module } from '@/config/type'
 
-import { entries } from '../../utils'
-import { useEvents_config } from '../events/event.state'
-import { storeLifecycles } from './type'
-import { logger, onLifecycle } from './utils'
+import { entries } from '@/utils'
+import { useEvents_config } from '@/modules/events/use'
+
+import { storeLifecycles } from '@/modules/store/type'
+import { logger, onLifecycle } from '@/modules/store/utils'
 
 export default {
   init: async (config) => {
@@ -24,8 +25,6 @@ export default {
     }
 
     logger.info('Initiated')
-
-    await emit('init', {})
     return true
   },
   defer: true,

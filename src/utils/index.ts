@@ -79,3 +79,4 @@ export const createLogger = (label: string): Record<LogType, LogFunction> => {
 }
 
 export const defaultValue = <T>(v: T | undefined, value: T): T => v ?? value
+export const typeOf = <T>(): T => ({} as T)

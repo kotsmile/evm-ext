@@ -1,33 +1,19 @@
-import type { EvmConfig } from '../../config/type'
-import { ISigner, safeRead, unwrap, Wrap, wrap, chain } from '../../utils'
-import type { ChainId } from '../../utils/chain'
-
-import type { UpdateParams, WalletHandler } from './wallets/base'
-
-import { useState } from '../state'
-
-import { useEvents_config } from '../events/event.state'
 import type { Bytes } from 'ethers'
-import { logger } from './utils'
-import type { ContractsJSONStruct } from '../contracts'
-import type { StoresDefinition } from '../store'
-import type { WalletsDefintion } from './type'
-import type { Cast } from '../../utils/type'
 
-export type WalletState = {
-  wallet: {
-    wallet: string
-    signer: Wrap<ISigner>
-    chainId: ChainId
-    realChainId: ChainId | null
-    chainIds: ChainId[]
-    DEFAULT_CHAINID: ChainId
-    login: boolean
-    loading: boolean
-    walletType: string | null
-    walletHandler: Wrap<WalletHandler | null>
-  }
-}
+import type { EvmConfig } from '@/config/type'
+
+import { safeRead, unwrap, wrap } from '@/utils'
+import type { ChainId } from '@/utils/chain'
+import type { Cast } from '@/utils/type'
+
+import { useState } from '@/modules/state'
+import { useEvents_config } from '@/modules/events/use'
+import type { ContractsJSONStruct } from '@/modules/contracts'
+import type { StoresDefinition } from '@/modules/store'
+
+import type { UpdateParams } from '@/modules/wallet/wallets/base'
+import { logger } from '@/modules/wallet/utils'
+import type { WalletsDefintion } from '@/modules/wallet/type'
 
 const THIS = (config: EvmConfig) => useWallet_config(config)()
 

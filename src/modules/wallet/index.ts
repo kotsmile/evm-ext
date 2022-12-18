@@ -1,12 +1,13 @@
 import { logger } from 'ethers'
-import type { EvmConfig, Module } from '../../config/type'
-import type { ContractsJSONStruct } from '../contracts'
-import { useState } from '../state'
-import type { StoresDefinition } from '../store'
-import type { WalletsDefintion } from './type'
+import type { EvmConfig, Module } from '@/config/type'
 
-import { useWallet_config } from './wallet.state'
-export type { WalletState } from './wallet.state'
+import type { ContractsJSONStruct } from '@/modules/contracts'
+import type { StoresDefinition } from '@/modules/store'
+import { useState } from '@/modules/state'
+
+import type { WalletsDefintion } from '@/modules/wallet/type'
+import { useWallet_config } from '@/modules/wallet/use'
+import { state } from '@/modules/wallet/state'
 
 export default {
   tools: <Wallets extends WalletsDefintion>(
@@ -23,6 +24,7 @@ export default {
     logger.info('Initiated')
     return true
   },
+  state,
 } satisfies Module
 
 export type {
@@ -34,3 +36,4 @@ export type {
 } from './wallets/base'
 
 export type { WalletsDefintion, Options } from './type'
+export type { WalletState } from './state'

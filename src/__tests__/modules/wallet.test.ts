@@ -1,12 +1,11 @@
 import { expect } from 'chai'
 
-import { defineEvmConfig } from '../../config'
+import { defineEvmConfig } from '@/config'
+import type { State } from '@/modules/state'
+import { useState } from '@/modules/state'
 
-import state_config from '../../modules/state'
-import type { State } from '../../modules/state'
-
-import type { Adapter } from '../../adapter'
-import { useWallet_config } from '../../modules/wallet/wallet.state'
+import type { Adapter } from '@/adapter'
+import { useWallet_config } from '@/modules/wallet/use'
 
 export let testState: any = {
   wallet: {},

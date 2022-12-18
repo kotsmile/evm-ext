@@ -1,22 +1,8 @@
-import type { EvmConfig } from '../../config/type'
-import type { Events, CallbackFunction, EventType, Filter, RawEventType } from './type'
+import type { EvmConfig } from '@/config/type'
+import type { Events, EventType, Filter, RawEventType } from '@/modules/events/type'
+import { emitMsg, toAfterEvent, toBeforeEvent } from '@/modules/events/utils'
 
-import { emitMsg, toAfterEvent, toBeforeEvent } from './utils'
-
-import { useState } from '../state'
-
-export type EventsState = {
-  events: {
-    listeners: {
-      id: number
-      event: EventType
-      once: boolean
-      callback: CallbackFunction
-      filters: Filter<any>[]
-    }[]
-    listenerId: number
-  }
-}
+import { useState } from '@/modules/state'
 
 const THIS = (config: EvmConfig) => useEvents_config(config)()
 

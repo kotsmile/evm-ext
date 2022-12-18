@@ -1,7 +1,8 @@
-import type { EvmConfig, InitFunction, Module } from '../../config/type'
-import state_module from '../state'
+import type { Module } from '@/config/type'
+import { useState } from '@/modules/state'
 
-import { useEvents_config } from './event.state'
+import { state } from '@/modules/events/state'
+import { useEvents_config } from '@/modules/events/use'
 
 export default {
   tools: (config) => {
@@ -9,15 +10,13 @@ export default {
       useEvents: useEvents_config(config),
     }
   },
-  init: async (config) => {
-    const state = state_module.tools(config)
-    state.events.listenerId = 1
-    state.events.listeners = []
+  init: async () => {
     return true
   },
+  state,
 } satisfies Module
 
-export type { EventsState } from './event.state'
+export type { EventsState } from './state'
 export type {
   AfterEvent,
   BeforeEvent,

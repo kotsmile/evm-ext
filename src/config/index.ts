@@ -26,19 +26,23 @@ export const defineEvmConfig = <
     init: async () => {
       logger.info('Init modules')
 
-      const defered: Module[] = []
+      const defered: Record<string, Module> = {}
       const modules_: Record<string, Module> = modules
 
       for (const name of keyOf(modules_)) {
         const module = modules_[name]
         if (module.defer) {
-          defered.push(module)
+          defered[name] = module
           continue
         }
-        await module.init?.(config)
+        const response = await module.init?.(config, modules)
+        if (response === false) logger.error(`Cant init ${name} module`)
       }
 
-      for (const module of defered) await module.init?.(config)
+      for (const name of keyOf(defered)) {
+        const response = await defered[name].init?.(config, modules)
+        if (response === false) logger.error(`Cant init ${name} module`)
+      }
     },
     config,
     ...modules.contracts.tools(config),

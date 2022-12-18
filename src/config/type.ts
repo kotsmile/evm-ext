@@ -8,6 +8,7 @@ import type { RpcDefinition } from '@/modules/chain/type'
 import type { Options, WalletsDefintion } from '@/modules/wallet'
 
 import type { Adapter } from '@/adapter'
+import type { ChainId } from '@/utils/chain'
 
 export type EvmConfig<
   ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
@@ -34,11 +35,20 @@ export type EvmConfig<
   DEBUG?: boolean
 }
 
-export type InitFunction = (config: EvmConfig) => Promise<boolean>
+export type InitFunction = (
+  config: EvmConfig,
+  modules: Record<string, Module>
+) => Promise<boolean>
 export type ToolsFunction = (config: EvmConfig) => any
+
+export type StateFunction<
+  N extends string = string,
+  S extends Record<N, Record<string, any>> = any
+> = (config: EvmConfig) => S[N]
 
 export type Module = {
   tools?: ToolsFunction
   init?: InitFunction
   defer?: boolean
+  state?: StateFunction
 }
