@@ -23,8 +23,14 @@ export default {
     }
   },
   init: async (config) => {
-    logger.info('List of contracts')
-    debugInfo(config)
+    try {
+      logger.info('List of contracts')
+      debugInfo(config)
+    } catch (e) {
+      logger.error(e)
+      return false
+    }
+    logger.info('Initiated')
     return true
   },
 } satisfies Module

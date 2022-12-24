@@ -1,4 +1,3 @@
-import { logger } from 'ethers'
 import type { EvmConfig, Module } from '@/config/type'
 
 import type { ContractsJSONStruct } from '@/modules/contracts'
@@ -8,6 +7,7 @@ import { useState } from '@/modules/state'
 import type { WalletsDefintion } from '@/modules/wallet/type'
 import { useWallet_config } from '@/modules/wallet/use'
 import { state } from '@/modules/wallet/state'
+import { logger } from '@/modules/wallet/utils'
 
 export default {
   tools: <Wallets extends WalletsDefintion>(
@@ -18,9 +18,14 @@ export default {
     }
   },
   init: async (config) => {
-    const state = useState(config)
-    state.wallet.chainId = state.wallet.DEFAULT_CHAINID = config.DEFAULT_CHAINID
-    state.wallet.chainIds = config.chainIds
+    try {
+      const state = useState(config)
+      state.wallet.chainId = state.wallet.DEFAULT_CHAINID = config.DEFAULT_CHAINID
+      state.wallet.chainIds = config.chainIds
+    } catch (e) {
+      logger.error(e)
+      return false
+    }
     logger.info('Initiated')
     return true
   },
@@ -33,7 +38,7 @@ export type {
   ConnectFunction,
   UpdateStoreStateFunction,
   WalletHandler,
-} from './wallets/base'
+} from '@/modules/wallet/wallets/base'
 
-export type { WalletsDefintion, Options } from './type'
-export type { WalletState } from './state'
+export type { WalletsDefintion, Options } from '@/modules/wallet/type'
+export type { WalletState } from '@/modules/wallet/state'

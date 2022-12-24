@@ -7,7 +7,7 @@ import type { ChainId } from '@/utils/chain'
 import type { Cast } from '@/utils/type'
 
 import { useState } from '@/modules/state'
-import { useEvents_config } from '@/modules/events/use'
+import { useEvents } from '@/modules/events'
 import type { ContractsJSONStruct } from '@/modules/contracts'
 import type { StoresDefinition } from '@/modules/store'
 
@@ -38,8 +38,6 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
 
       logger.info(`Connect to "${walletType}"`)
 
-      const useEvents = useEvents_config(config)
-
       const state = useState(config)
       const whClass = unwrap(state.wallet.walletHandler)
       if (whClass) whClass?.clear()
@@ -50,11 +48,11 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
         state.wallet.chainId,
         THIS(config).updateStoreState,
         (wallet) => {
-          useEvents().emit('onWalletChange', { wallet })
+          useEvents(config).emit('onWalletChange', { wallet })
           if (config.options?.updateOnWalletChange) THIS(config).loadAll({ login: true })
         },
         (chainId) => {
-          useEvents().emit('onChainChange', { chainId, natural: true })
+          useEvents(config).emit('onChainChange', { chainId, natural: true })
           if (config.options?.updateOnChainChange)
             THIS(config).loadAll({ init: true, login: true })
         }
@@ -68,7 +66,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       await THIS(config).loadAll({ init: true, login: true })
     },
     async loadAll({ init = true, login = true }: { init?: boolean; login?: boolean }) {
-      const { emit } = useEvents_config(config)()
+      const { emit } = useEvents(config)
 
       if (init) await emit('init', {})
       if (login) await emit('login', {})
@@ -88,7 +86,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       return null
     },
     async switchChain(chainId: ChainId): Promise<boolean> {
-      const { emit } = useEvents_config(config)()
+      const { emit } = useEvents(config)
       const state = useState(config)
 
       const result = Boolean(
@@ -98,7 +96,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       return result
     },
     async disconnect(): Promise<boolean> {
-      const { _emit } = useEvents_config(config)()
+      const { _emit } = useEvents(config)
       const state = useState(config)
 
       await _emit('beforeLogout', {})

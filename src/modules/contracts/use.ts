@@ -1,4 +1,5 @@
-import { Contract, type BaseContract } from 'ethers'
+import { Contract } from 'ethers'
+import type { BaseContract } from 'ethers'
 
 import type { EvmConfig } from '@/config/type'
 

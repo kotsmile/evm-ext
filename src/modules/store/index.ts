@@ -8,22 +8,26 @@ import { logger, onLifecycle } from '@/modules/store/utils'
 
 export default {
   init: async (config) => {
-    const { stores } = config
+    try {
+      const { stores } = config
 
-    const useEvents = useEvents_config(config)
-    const { addListener, addListenerOnce, emit } = useEvents()
+      const useEvents = useEvents_config(config)
+      const { addListener, addListenerOnce } = useEvents()
 
-    if (stores) {
-      for (const [name, store] of entries(stores)) {
-        logger.info(`Initiate ${name} store`)
-        for (const lifecycle of storeLifecycles) {
-          if (lifecycle === 'init')
-            addListenerOnce(lifecycle, store[onLifecycle(lifecycle)])
-          else addListener(lifecycle, store[onLifecycle(lifecycle)])
+      if (stores) {
+        for (const [name, store] of entries(stores)) {
+          logger.info(`Initiate ${name} store`)
+          for (const lifecycle of storeLifecycles) {
+            if (lifecycle === 'init')
+              addListenerOnce(lifecycle, store[onLifecycle(lifecycle)])
+            else addListener(lifecycle, store[onLifecycle(lifecycle)])
+          }
         }
       }
+    } catch (e) {
+      logger.error(e)
+      return false
     }
-
     logger.info('Initiated')
     return true
   },
@@ -36,4 +40,4 @@ export type {
   StoreLifecycle,
   StoreLifecycleCallback,
   StoresDefinition,
-} from './type'
+} from '@/modules/store/type'

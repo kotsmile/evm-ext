@@ -11,4 +11,4 @@ export default {
   },
 } satisfies Module
 
-export type { RpcDefinition } from './type'
+export type { RpcDefinition } from '@/modules/chain/type'

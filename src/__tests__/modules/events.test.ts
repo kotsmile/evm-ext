@@ -1,15 +1,15 @@
-import type { Adapter } from '../../adapter'
-import { defineEvmConfig } from '../../config'
+import type { Adapter } from '@/adapter'
+import { defineEvmConfig } from '@/config'
 
 describe('Events Module', () => {
   it('should trigger "init" event on init()', function (done) {
-    let testState: any = {
+    let state: any = {
       wallet: {},
       events: {},
     }
 
     const testAdapter: Adapter = () => ({
-      state: testState,
+      state: state,
     })
 
     const useTestEvm = defineEvmConfig({

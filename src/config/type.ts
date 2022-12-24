@@ -8,7 +8,6 @@ import type { RpcDefinition } from '@/modules/chain/type'
 import type { Options, WalletsDefintion } from '@/modules/wallet'
 
 import type { Adapter } from '@/adapter'
-import type { ChainId } from '@/utils/chain'
 
 export type EvmConfig<
   ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
