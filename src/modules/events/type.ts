@@ -1,5 +1,4 @@
-import { capitalize } from '../../utils'
-import type { StoreLifecycle } from '../store'
+import type { StoreLifecycle } from '@/modules/store'
 
 export type CallbackFunction = (...args: any) => any
 

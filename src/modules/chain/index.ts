@@ -1,6 +1,5 @@
 import type { EvmConfig, Module } from '@/config/type'
-
-import { getRpc_config, getProvider_config } from '@/modules/chain/node'
+import { getRpc_config, getProvider_config } from './node'
 
 export default {
   tools: (config: EvmConfig) => {
@@ -11,4 +10,4 @@ export default {
   },
 } satisfies Module
 
-export type { RpcDefinition } from '@/modules/chain/type'
+export type { RpcDefinition } from './type'

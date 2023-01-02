@@ -1,10 +1,8 @@
-import type { ISigner, WrapState } from '@/utils'
-import { wrapState } from '@/utils'
-
+import { wrapState, type ISigner, type WrapState } from '@/utils'
 import type { ChainId } from '@/utils/chain'
-
-import type { WalletHandler } from '@/modules/wallet/wallets/base'
 import type { StateFunction } from '@/config/type'
+
+import type { WalletHandler } from './wallets/base'
 
 export type WalletState = {
   wallet: {

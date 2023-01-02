@@ -4,10 +4,10 @@ import type { ContractsJSONStruct } from '@/modules/contracts'
 import type { StoresDefinition } from '@/modules/store'
 import { useState } from '@/modules/state'
 
-import type { WalletsDefintion } from '@/modules/wallet/type'
-import { useWallet_config } from '@/modules/wallet/use'
-import { state } from '@/modules/wallet/state'
-import { logger } from '@/modules/wallet/utils'
+import type { WalletsDefintion } from './type'
+import { useWallet_config } from './use'
+import { state } from './state'
+import { logger } from './utils'
 
 export default {
   tools: <Wallets extends WalletsDefintion>(
@@ -19,9 +19,9 @@ export default {
   },
   init: async (config) => {
     try {
-      const state = useState(config)
-      state.wallet.chainId = state.wallet.DEFAULT_CHAINID = config.DEFAULT_CHAINID
-      state.wallet.chainIds = config.chainIds
+      const { wallet } = useState(config)
+      wallet.chainId = wallet.DEFAULT_CHAINID = config.DEFAULT_CHAINID
+      wallet.chainIds = config.chainIds
     } catch (e) {
       logger.error(e)
       return false
@@ -38,7 +38,7 @@ export type {
   ConnectFunction,
   UpdateStoreStateFunction,
   WalletHandler,
-} from '@/modules/wallet/wallets/base'
+} from './wallets/base'
 
-export type { WalletsDefintion, Options } from '@/modules/wallet/type'
-export type { WalletState } from '@/modules/wallet/state'
+export type { WalletsDefintion, Options } from './type'
+export type { WalletState } from './state'

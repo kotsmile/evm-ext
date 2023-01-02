@@ -5,7 +5,7 @@ import store from './store'
 import state from './state'
 import wallet from './wallet'
 
-import type { Module } from '../config/type'
+import type { Module } from '@/config/type'
 
 export default {
   contracts,

@@ -1,6 +1,6 @@
 import type { StateFunction } from '@/config/type'
 
-import type { CallbackFunction, EventType, Filter } from '@/modules/events/type'
+import type { CallbackFunction, EventType, Filter } from './type'
 
 export type EventsState = {
   events: {

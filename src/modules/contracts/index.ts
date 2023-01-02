@@ -1,12 +1,8 @@
 import type { EvmConfig, Module } from '@/config/type'
-import type {
-  ContractsJSONStruct,
-  AppChainIds,
-  ContractsDefinition,
-} from '@/modules/contracts/type'
-import { debugInfo, logger } from '@/modules/contracts/utils'
 
-import { useContractsOnChain_config, useContracts_config } from '@/modules/contracts/use'
+import type { ContractsJSONStruct, AppChainIds, ContractsDefinition } from './type'
+import { debugInfo, logger } from './utils'
+import { useContractsOnChain_config, useContracts_config } from './use'
 
 export default {
   tools: <
@@ -43,5 +39,5 @@ export type {
   ContractsDefinitionOnChain,
   ContractsDefinitionShared,
   ContractsJSONStruct,
-} from '@/modules/contracts/type'
-export { contractType } from '@/modules/contracts/utils'
+} from './type'
+export { contractType } from './utils'

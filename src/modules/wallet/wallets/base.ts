@@ -1,9 +1,9 @@
 import { providers } from 'ethers'
 
-import type { EvmConfig } from '../../../config/type'
+import type { EvmConfig } from '@/config/type'
 
-import type { ISigner } from '../../../utils'
-import type { ChainId } from '../../../utils/chain'
+import type { ISigner } from '@/utils'
+import type { ChainId } from '@/utils/chain'
 
 import { events } from './utils'
 

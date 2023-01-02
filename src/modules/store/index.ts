@@ -3,8 +3,8 @@ import type { Module } from '@/config/type'
 import { entries } from '@/utils'
 import { useEvents_config } from '@/modules/events/use'
 
-import { storeLifecycles } from '@/modules/store/type'
-import { logger, onLifecycle } from '@/modules/store/utils'
+import { storeLifecycles } from './type'
+import { logger, onLifecycle } from './utils'
 
 export default {
   init: async (config) => {
@@ -40,4 +40,4 @@ export type {
   StoreLifecycle,
   StoreLifecycleCallback,
   StoresDefinition,
-} from '@/modules/store/type'
+} from './type'

@@ -1,31 +1,31 @@
 import type { EvmConfig } from '@/config/type'
-import type { Events, EventType, Filter, RawEventType } from '@/modules/events/type'
-import { emitMsg, toAfterEvent, toBeforeEvent } from '@/modules/events/utils'
+
+import type { Events, EventType, Filter, RawEventType } from './type'
+import { emitMsg, toAfterEvent, toBeforeEvent } from './utils'
 
 import { useState } from '@/modules/state'
 
-const THIS = (config: EvmConfig) => useEvents_config(config)()
-
 export const useEvents_config = (config: EvmConfig) => {
+  const _this = useEvents_config(config)()
   return () => ({
     addListener<Event extends EventType>(
       event: Event,
       callback: (args: Events[Event]['args']) => any,
       filters: Filter<Event>[] = []
     ): number {
-      return THIS(config)._addListener(event, callback, filters)
+      return _this._addListener(event, callback, filters)
     },
     addListenerOnce<Event extends EventType>(
       event: Event,
       callback: (args: Events[Event]['args']) => any,
       filters: Filter<Event>[] = []
     ): number {
-      return THIS(config)._addListener(event, callback, filters, true)
+      return _this._addListener(event, callback, filters, true)
     },
     async emit<Event extends RawEventType>(event: Event, args: Events[Event]['args']) {
-      await THIS(config)._emit(toBeforeEvent(event), args)
-      await THIS(config)._emit(event, args)
-      await THIS(config)._emit(toAfterEvent(event), args)
+      await _this._emit(toBeforeEvent(event), args)
+      await _this._emit(event, args)
+      await _this._emit(toAfterEvent(event), args)
     },
     removeListener(listenerId: number) {
       const state = useState(config)
@@ -71,7 +71,7 @@ export const useEvents_config = (config: EvmConfig) => {
       )
 
       emitMsg(event, args, listenersTriggered)
-      removeIds.forEach(THIS(config).removeListener)
+      removeIds.forEach(_this.removeListener)
     },
   })
 }

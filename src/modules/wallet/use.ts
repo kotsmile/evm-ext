@@ -11,25 +11,24 @@ import { useEvents } from '@/modules/events'
 import type { ContractsJSONStruct } from '@/modules/contracts'
 import type { StoresDefinition } from '@/modules/store'
 
-import type { UpdateParams } from '@/modules/wallet/wallets/base'
-import { logger } from '@/modules/wallet/utils'
-import type { WalletsDefintion } from '@/modules/wallet/type'
-
-const THIS = (config: EvmConfig) => useWallet_config(config)()
+import type { UpdateParams } from './wallets/base'
+import { logger } from './utils'
+import type { WalletsDefintion } from './type'
 
 export const useWallet_config = <Wallets extends WalletsDefintion>(
   config: EvmConfig<ContractsJSONStruct, any, any, any, StoresDefinition, Wallets>
 ) => {
+  const _this = useWallet_config(config)()
   return () => ({
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {
       if (!wallet || !chainId) return
 
-      const state = useState(config)
+      const { wallet: walletState } = useState(config)
 
-      state.wallet.signer = wrapState(signer)
-      state.wallet.wallet = wallet
-      state.wallet.realChainId = chainId as ChainId
-      state.wallet.login = login
+      walletState.signer = wrapState(signer)
+      walletState.wallet = wallet
+      walletState.realChainId = chainId as ChainId
+      walletState.login = login
     },
     async connect(walletType: Cast<keyof Wallets | null, string>, chainId?: ChainId) {
       const { wallets } = config
@@ -38,32 +37,32 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
 
       logger.info(`Connect to "${walletType}"`)
 
-      const state = useState(config)
-      const whClass = unwrapState(state.wallet.walletHandler)
+      const { wallet } = useState(config)
+      const whClass = unwrapState(wallet.walletHandler)
       if (whClass) whClass?.clear()
 
       const walletHandler = new wallets[walletType](
         config,
         config.chainIds,
-        state.wallet.chainId,
-        THIS(config).updateStoreState,
+        wallet.chainId,
+        _this.updateStoreState,
         (wallet) => {
           useEvents(config).emit('onWalletChange', { wallet })
-          if (config.options?.updateOnWalletChange) THIS(config).loadAll({ login: true })
+          if (config.options?.updateOnWalletChange) _this.loadAll({ login: true })
         },
         (chainId) => {
           useEvents(config).emit('onChainChange', { chainId, natural: true })
           if (config.options?.updateOnChainChange)
-            THIS(config).loadAll({ init: true, login: true })
+            _this.loadAll({ init: true, login: true })
         }
       )
 
-      state.wallet.walletType = walletType
+      wallet.walletType = walletType
       if (!(await walletHandler?.connect())) return
 
-      state.wallet.chainId = chainId ?? state.wallet.chainId
+      wallet.chainId = chainId ?? wallet.chainId
 
-      await THIS(config).loadAll({ init: true, login: true })
+      await _this.loadAll({ init: true, login: true })
     },
     async loadAll({ init = true, login = true }: { init?: boolean; login?: boolean }) {
       const { emit } = useEvents(config)
@@ -74,11 +73,11 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       await emit('final', {})
     },
     async signMessage(data: string | Bytes): Promise<string | null> {
-      const state = useState(config)
+      const { wallet } = useState(config)
 
-      if (state.wallet.login) {
+      if (wallet.login) {
         const signedMessage = await safeRead<string | null>(
-          unwrapState(state.wallet.signer)!.signMessage(data),
+          unwrapState(wallet.signer)!.signMessage(data),
           null
         )
         return signedMessage
@@ -87,27 +86,27 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
     },
     async switchChain(chainId: ChainId): Promise<boolean> {
       const { emit } = useEvents(config)
-      const state = useState(config)
+      const { wallet } = useState(config)
 
       const result = Boolean(
-        await unwrapState(state.wallet.walletHandler)?.switchChain(chainId)
+        await unwrapState(wallet.walletHandler)?.switchChain(chainId)
       )
       if (result) emit('onChainChange', { chainId, natural: false })
       return result
     },
     async disconnect(): Promise<boolean> {
       const { _emit } = useEvents(config)
-      const state = useState(config)
+      const { wallet } = useState(config)
 
       await _emit('beforeLogout', {})
-      state.wallet.login = false
-      state.wallet.wallet = ''
+      wallet.login = false
+      wallet.wallet = ''
       await _emit('logout', {})
 
       // setPreservedConnection(this.walletType, false)
 
       await _emit('afterLogout', {})
-      return Boolean(await unwrapState(state.wallet.walletHandler)?.disconnect())
+      return Boolean(await unwrapState(wallet.walletHandler)?.disconnect())
     },
   })
 }

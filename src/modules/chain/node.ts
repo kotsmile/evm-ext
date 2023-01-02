@@ -1,11 +1,9 @@
 import { providers } from 'ethers'
 
 import type { EvmConfig } from '@/config/type'
+import { getChainTag, type ChainId } from '@/utils/chain'
 
-import type { ChainId } from '@/utils/chain'
-import { getChainTag } from '@/utils/chain'
-
-import { logger } from '@/modules/chain/utils'
+import { logger } from './utils'
 
 export const getRpc_config = (config: EvmConfig) => {
   const rpcFunction = config.rpc

@@ -1,8 +1,8 @@
 import type { EvmConfig, Module } from '@/config/type'
 
-import { state } from '@/modules/events/state'
-import { useEvents_config } from '@/modules/events/use'
-import { logger } from '@/modules/events/utils'
+import { state } from './state'
+import { useEvents_config } from './use'
+import { logger } from './utils'
 
 export default {
   tools: (config) => {
@@ -26,7 +26,7 @@ export default {
 
 export const useEvents = (config: EvmConfig) => useEvents_config(config)()
 
-export type { EventsState } from '@/modules/events/state'
+export type { EventsState } from './state'
 export type {
   AfterEvent,
   BeforeEvent,
@@ -36,5 +36,5 @@ export type {
   Filter,
   RawEventType,
   RawEvents,
-} from '@/modules/events/type'
-export { toAfterEvent, toBeforeEvent } from '@/modules/events/utils'
+} from './type'
+export { toAfterEvent, toBeforeEvent } from './utils'

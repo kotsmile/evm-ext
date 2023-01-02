@@ -1,6 +1,7 @@
-import { keyOf } from '@/utils'
 import type { EvmConfig, Module } from '@/config/type'
-import { logger } from '@/modules/state/utils'
+import { keyOf } from '@/utils'
+
+import { logger } from './utils'
 
 const main = {
   tools: (config: EvmConfig) => {
@@ -28,4 +29,4 @@ const main = {
 export default main
 
 export const useState = main.tools
-export type { State, Namespace, Key, Value } from '@/modules/state/schema'
+export type { State, Namespace, Key, Value } from './schema'

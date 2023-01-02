@@ -1,5 +1,5 @@
-import type { EvmConfig } from '../../config/type'
-import { capitalize, concat, createLogger } from '../../utils'
+import { capitalize, concat, createLogger } from '@/utils'
+
 import type { Events, EventType, RawEventType } from './type'
 
 export const logger = createLogger('Events Module')

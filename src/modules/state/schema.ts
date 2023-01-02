@@ -1,5 +1,5 @@
-import type { EventsState } from '../events'
-import type { WalletState } from '../wallet'
+import type { EventsState } from '@/modules/events'
+import type { WalletState } from '@/modules/wallet'
 
 export type State = EventsState & WalletState
 

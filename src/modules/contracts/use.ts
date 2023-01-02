@@ -13,7 +13,7 @@ import type {
   ContractsJSONStruct,
   ContractsDefinition,
   ContractDefinition,
-} from '@/modules/contracts/type'
+} from './type'
 
 import { getProvider_config } from '@/modules/chain/node'
 import { logger } from './utils'
