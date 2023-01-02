@@ -4,7 +4,7 @@ import { logger } from '@/modules/state/utils'
 
 const main = {
   tools: (config: EvmConfig) => {
-    return config.adapter().state
+    return config.adapter.state()
   },
   init: async (config, modules) => {
     try {

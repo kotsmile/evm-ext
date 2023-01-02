@@ -2,7 +2,7 @@ import type { Bytes } from 'ethers'
 
 import type { EvmConfig } from '@/config/type'
 
-import { safeRead, unwrap, wrap } from '@/utils'
+import { safeRead, unwrapState, wrapState } from '@/utils'
 import type { ChainId } from '@/utils/chain'
 import type { Cast } from '@/utils/type'
 
@@ -26,7 +26,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
 
       const state = useState(config)
 
-      state.wallet.signer = wrap(signer)
+      state.wallet.signer = wrapState(signer)
       state.wallet.wallet = wallet
       state.wallet.realChainId = chainId as ChainId
       state.wallet.login = login
@@ -39,7 +39,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       logger.info(`Connect to "${walletType}"`)
 
       const state = useState(config)
-      const whClass = unwrap(state.wallet.walletHandler)
+      const whClass = unwrapState(state.wallet.walletHandler)
       if (whClass) whClass?.clear()
 
       const walletHandler = new wallets[walletType](
@@ -78,7 +78,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
 
       if (state.wallet.login) {
         const signedMessage = await safeRead<string | null>(
-          unwrap(state.wallet.signer)!.signMessage(data),
+          unwrapState(state.wallet.signer)!.signMessage(data),
           null
         )
         return signedMessage
@@ -90,7 +90,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       const state = useState(config)
 
       const result = Boolean(
-        await unwrap(state.wallet.walletHandler)?.switchChain(chainId)
+        await unwrapState(state.wallet.walletHandler)?.switchChain(chainId)
       )
       if (result) emit('onChainChange', { chainId, natural: false })
       return result
@@ -107,7 +107,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       // setPreservedConnection(this.walletType, false)
 
       await _emit('afterLogout', {})
-      return Boolean(await unwrap(state.wallet.walletHandler)?.disconnect())
+      return Boolean(await unwrapState(state.wallet.walletHandler)?.disconnect())
     },
   })
 }

@@ -12,24 +12,25 @@ export let testState: any = {
   event: {},
 }
 
-export const testAdapter: Adapter = () => ({
-  state: <any>{
-    wallet: new Proxy({} as State['wallet'], {
-      get: (_, k: keyof State['wallet']) => testState.wallet[k],
-      set: (_, k: keyof State['wallet'], v: string) => {
-        testState.wallet[k] = v
-        return true
-      },
-    }),
-    events: new Proxy({} as State['events'], {
-      get: (_, k: keyof State['events']) => testState.event[k],
-      set: (_, k: keyof State['events'], v: string) => {
-        testState.event[k] = v
-        return true
-      },
-    }),
-  },
-})
+export const testAdapter: Adapter = {
+  state: () =>
+    <any>{
+      wallet: new Proxy({} as State['wallet'], {
+        get: (_, k: keyof State['wallet']) => testState.wallet[k],
+        set: (_, k: keyof State['wallet'], v: string) => {
+          testState.wallet[k] = v
+          return true
+        },
+      }),
+      events: new Proxy({} as State['events'], {
+        get: (_, k: keyof State['events']) => testState.event[k],
+        set: (_, k: keyof State['events'], v: string) => {
+          testState.event[k] = v
+          return true
+        },
+      }),
+    },
+}
 
 const useTestEvm = defineEvmConfig({
   adapter: testAdapter,

@@ -15,7 +15,8 @@ export type EvmConfig<
   DefaultChainId extends ChainIds[number] = any,
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]> = any,
   Stores extends StoresDefinition = StoresDefinition,
-  Wallets extends WalletsDefintion = WalletsDefintion
+  Wallets extends WalletsDefintion = WalletsDefintion,
+  A extends Adapter = Adapter
 > = {
   /// deployed contracts
   readonly contractsJSON?: ContractsJSON
@@ -29,7 +30,7 @@ export type EvmConfig<
   readonly stores?: Stores
   readonly wallets?: Wallets
 
-  adapter: Adapter
+  adapter: A
   options?: Options
   DEBUG?: boolean
 }
@@ -38,7 +39,7 @@ export type InitFunction = (
   config: EvmConfig,
   modules: Record<string, Module>
 ) => Promise<boolean>
-export type ToolsFunction = (config: EvmConfig) => any
+export type ToolsFunction<R = any> = (config: EvmConfig) => R
 
 export type StateFunction<
   N extends string = string,

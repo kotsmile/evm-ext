@@ -8,9 +8,9 @@ describe('Events Module', () => {
       events: {},
     }
 
-    const testAdapter: Adapter = () => ({
-      state: state,
-    })
+    const testAdapter: Adapter = {
+      state: () => state,
+    }
 
     const useTestEvm = defineEvmConfig({
       stores: {

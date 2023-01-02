@@ -1,5 +1,5 @@
-import type { ISigner, Wrap } from '@/utils'
-import { wrap } from '@/utils'
+import type { ISigner, WrapState } from '@/utils'
+import { wrapState } from '@/utils'
 
 import type { ChainId } from '@/utils/chain'
 
@@ -9,7 +9,7 @@ import type { StateFunction } from '@/config/type'
 export type WalletState = {
   wallet: {
     wallet: string
-    signer: Wrap<ISigner>
+    signer: WrapState<ISigner>
     chainId: ChainId
     realChainId: ChainId | null
     chainIds: ChainId[]
@@ -17,7 +17,7 @@ export type WalletState = {
     login: boolean
     loading: boolean
     walletType: string | null
-    walletHandler: Wrap<WalletHandler | null>
+    walletHandler: WrapState<WalletHandler | null>
   }
 }
 
@@ -25,7 +25,7 @@ const DEF_CHAINID: ChainId = '1'
 export const state: StateFunction<'wallet', WalletState> = (config) => {
   return {
     wallet: '',
-    signer: wrap(null),
+    signer: wrapState(null),
     chainId: config.DEFAULT_CHAINID ?? DEF_CHAINID,
     realChainId: DEF_CHAINID,
     chainIds: config.chainIds ?? [DEF_CHAINID],
@@ -33,6 +33,6 @@ export const state: StateFunction<'wallet', WalletState> = (config) => {
     login: false,
     loading: false,
     walletType: null,
-    walletHandler: wrap(null),
+    walletHandler: wrapState(null),
   }
 }

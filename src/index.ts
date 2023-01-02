@@ -1,11 +1,9 @@
 import { defineEvmConfig } from '@/config'
 export { defineEvmConfig }
 
-import modules from '@/modules'
-export { modules }
-
+export * as modules from '@/modules'
+export * as mocks from '@/mocks'
 export * as adapter from '@/adapter'
-export * as utils from '@/utils'
 
-import { safe, safeRead, safeWrite, rpc } from '@/utils'
-export { safe, safeRead, safeWrite, rpc }
+export { safe, safeRead, safeWrite, rpc } from '@/utils'
+export * as utils from '@/utils'
