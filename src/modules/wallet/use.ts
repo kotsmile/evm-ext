@@ -18,8 +18,7 @@ import { useWalletState } from './state'
 export const useWallet_config = <Wallets extends WalletsDefintion>(
   config: EvmConfig<ContractsJSONStruct, any, any, any, StoresDefinition, Wallets>
 ) => {
-  const _this = useWallet_config(config)()
-  return () => ({
+  return {
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {
       if (!wallet || !chainId) return
 
@@ -45,15 +44,15 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
         config,
         config.chainIds,
         walletState.chainId,
-        _this.updateStoreState,
+        this.updateStoreState,
         (wallet) => {
           useEvents(config).emit('onWalletChange', { wallet })
-          if (config.options?.updateOnWalletChange) _this.loadAll({ login: true })
+          if (config.options?.updateOnWalletChange) this.loadAll({ login: true })
         },
         (chainId) => {
           useEvents(config).emit('onChainChange', { chainId, natural: true })
           if (config.options?.updateOnChainChange)
-            _this.loadAll({ init: true, login: true })
+            this.loadAll({ init: true, login: true })
         }
       )
 
@@ -62,7 +61,7 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
 
       walletState.chainId = chainId ?? walletState.chainId
 
-      await _this.loadAll({ init: true, login: true })
+      await this.loadAll({ init: true, login: true })
     },
     async loadAll({ init = true, login = true }: { init?: boolean; login?: boolean }) {
       const { emit } = useEvents(config)
@@ -108,5 +107,5 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       await _emit('afterLogout', {})
       return Boolean(await unwrapState(walletState.walletHandler)?.disconnect())
     },
-  })
+  }
 }

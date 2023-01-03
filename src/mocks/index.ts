@@ -2,29 +2,19 @@ import type { BaseContract } from 'ethers'
 
 import type { adapter } from '@/index'
 import type { ContractsJSONStruct } from '@/modules/contracts'
-import type { State } from '@/modules/state'
-import type { ToolsFunction } from '@/config/type'
+import type { EvmConfig, ToolsFunction } from '@/config/type'
 
-import { wrapState } from '@/utils'
+export const mockState = {} as any
 
-export const mockState = (): State => ({
-  events: {
-    listenerId: 1,
-    listeners: [],
-  },
-  wallet: {
-    chainId: '1',
-    chainIds: ['1'],
-    DEFAULT_CHAINID: '1',
-    realChainId: '1',
-    signer: wrapState(null),
-    walletHandler: wrapState(null),
-    login: false,
-    loading: false,
-    wallet: '0xSomeAddress',
-    walletType: null,
-  },
-})
+export const mockCreateState = <State>(
+  name: string,
+  state: (config: EvmConfig) => State
+) => {
+  return (config: EvmConfig) => {
+    if (name in mockState) return mockState[name]
+    return (mockState[name] = state(config))
+  }
+}
 
 export const mockTools = ((config) => ({
   helloTool: () => console.log('hello world'),
@@ -32,7 +22,9 @@ export const mockTools = ((config) => ({
 })) satisfies ToolsFunction
 
 export const mockAdapter = {
-  state: mockState,
+  state: {
+    createState: mockCreateState,
+  },
   tools: mockTools,
 } satisfies adapter.AdapterDefinition
 

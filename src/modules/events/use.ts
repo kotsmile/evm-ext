@@ -5,26 +5,25 @@ import { emitMsg, toAfterEvent, toBeforeEvent } from './utils'
 import { useEventsState } from './state'
 
 export const useEvents_config = (config: EvmConfig) => {
-  const _this = useEvents_config(config)()
-  return () => ({
+  return {
     addListener<Event extends EventType>(
       event: Event,
       callback: (args: Events[Event]['args']) => any,
       filters: Filter<Event>[] = []
     ): number {
-      return _this._addListener(event, callback, filters)
+      return this._addListener(event, callback, filters)
     },
     addListenerOnce<Event extends EventType>(
       event: Event,
       callback: (args: Events[Event]['args']) => any,
       filters: Filter<Event>[] = []
     ): number {
-      return _this._addListener(event, callback, filters, true)
+      return this._addListener(event, callback, filters, true)
     },
     async emit<Event extends RawEventType>(event: Event, args: Events[Event]['args']) {
-      await _this._emit(toBeforeEvent(event), args)
-      await _this._emit(event, args)
-      await _this._emit(toAfterEvent(event), args)
+      await this._emit(toBeforeEvent(event), args)
+      await this._emit(event, args)
+      await this._emit(toAfterEvent(event), args)
     },
     removeListener(listenerId: number) {
       const eventsState = useEventsState(config)
@@ -70,7 +69,7 @@ export const useEvents_config = (config: EvmConfig) => {
       )
 
       emitMsg(event, args, listenersTriggered)
-      removeIds.forEach(_this.removeListener)
+      removeIds.forEach(this.removeListener)
     },
-  })
+  }
 }

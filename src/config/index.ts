@@ -11,7 +11,7 @@ import type { AdapterDefinition } from '@/adapter'
 import type { EvmConfig, Module } from '@/config/type'
 import { logger } from '@/config/utils'
 
-import { keyOf } from '@/utils'
+import { disableLogger, keyOf } from '@/utils'
 
 export const defineEvmConfig = <
   A extends AdapterDefinition,
@@ -32,6 +32,8 @@ export const defineEvmConfig = <
     A
   >
 ) => {
+  if (config.DEBUG === false) disableLogger()
+
   return () => ({
     /// inits every module
     init: async () => {

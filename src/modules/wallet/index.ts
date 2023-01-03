@@ -14,7 +14,7 @@ export default {
   ) => {
     return {
       useWallet: useWallet_config<Wallets>(config),
-      useWalletState: useWalletState(config),
+      useWalletState: () => useWalletState(config),
     }
   },
   init: async (config) => {

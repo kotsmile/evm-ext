@@ -1,39 +1,10 @@
-import { expect } from 'chai'
-
 import { defineEvmConfig } from '@/config'
-import type { State } from '@/modules/state'
-import { useState } from '@/modules/state'
-
-import type { AdapterDefinition } from '@/adapter'
 import { useWallet_config } from '@/modules/wallet/use'
-
-export let testState: any = {
-  wallet: {},
-  event: {},
-}
-
-export const testAdapter: AdapterDefinition = {
-  state: () =>
-    <any>{
-      wallet: new Proxy({} as State['wallet'], {
-        get: (_, k: keyof State['wallet']) => testState.wallet[k],
-        set: (_, k: keyof State['wallet'], v: string) => {
-          testState.wallet[k] = v
-          return true
-        },
-      }),
-      events: new Proxy({} as State['events'], {
-        get: (_, k: keyof State['events']) => testState.event[k],
-        set: (_, k: keyof State['events'], v: string) => {
-          testState.event[k] = v
-          return true
-        },
-      }),
-    },
-}
+import { mockAdapter } from '@/mocks'
 
 const useTestEvm = defineEvmConfig({
-  adapter: testAdapter,
+  DEBUG: false,
+  adapter: mockAdapter,
 })
 const { config: testConfig, init } = useTestEvm()
 
@@ -42,7 +13,6 @@ describe('Wallet State', () => {
     await init()
 
     const useWallet = useWallet_config(testConfig)
-    const { connect } = useWallet()
 
     // await connect('walletconnect')
   })

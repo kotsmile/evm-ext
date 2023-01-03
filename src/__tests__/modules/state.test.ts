@@ -1,60 +1,33 @@
 import { expect } from 'chai'
 
-import { defineEvmConfig } from '../../config'
-
-import { useState } from '../../modules/state'
-import type { State } from '../../modules/state'
-
-import type { AdapterDefinition } from '../../adapter'
-
-export let testState: any = {
-  wallet: {},
-}
-
-export const testAdapter: AdapterDefinition = {
-  state: () =>
-    <any>{
-      wallet: new Proxy({} as State['wallet'], {
-        get: (_, k: keyof State['wallet']) => testState.wallet[k],
-        set: (_, k: keyof State['wallet'], v: string) => {
-          testState.wallet[k] = v
-          return true
-        },
-      }),
-    },
-}
+import { defineEvmConfig } from '@/config'
+import type { AdapterDefinition } from '@/adapter'
+import { mockState, mockAdapter } from '@/mocks'
 
 const useTestEvm = defineEvmConfig({
-  adapter: testAdapter,
+  adapter: mockAdapter,
+  DEBUG: false,
 })
-const { config: testConfig } = useTestEvm()
 
 describe('State module', () => {
-  beforeEach(
-    () =>
-      (testState = {
-        wallet: {},
-      })
-  )
   it('should set value', () => {
-    const state = useState(testConfig)
+    const { useWalletState } = useTestEvm()
 
-    const n = 'wallet'
     const k = 'wallet'
-    const v = '0xtest'
+    const v = '0xtest1'
 
-    state[n][k] = v
-    expect(testState[n][k]).eq(v)
+    useWalletState()[k] = v
+    expect(mockState['$wallet'][k]).eq(v)
   })
   it('should get value', () => {
-    const state = useState(testConfig)
+    const { useWalletState } = useTestEvm()
 
-    const n = 'wallet'
+    const n = '$wallet'
     const k = 'wallet'
-    const v = '0xtest'
+    const v = '0xtest2'
 
-    testState[n] = { [k]: v }
+    mockState[n] = { [k]: v }
 
-    expect(state[n][k]).eq(v)
+    expect(useWalletState()[k]).eq(v)
   })
 })

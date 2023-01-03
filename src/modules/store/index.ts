@@ -11,16 +11,16 @@ export default {
     try {
       const { stores } = config
 
-      const useEvents = useEvents_config(config)
-      const { addListener, addListenerOnce } = useEvents()
+      const useEvents = () => useEvents_config(config)
+      const eventsState = useEvents()
 
       if (stores) {
         for (const [name, store] of entries(stores)) {
-          logger.info(`Initiate ${name} store`)
+          logger.info(`Initiate "${name}" store`)
           for (const lifecycle of storeLifecycles) {
             if (lifecycle === 'init')
-              addListenerOnce(lifecycle, store[onLifecycle(lifecycle)])
-            else addListener(lifecycle, store[onLifecycle(lifecycle)])
+              eventsState.addListenerOnce(lifecycle, store[onLifecycle(lifecycle)])
+            else eventsState.addListener(lifecycle, store[onLifecycle(lifecycle)])
           }
         }
       }
@@ -31,7 +31,7 @@ export default {
     logger.info('Initiated')
     return true
   },
-  defer: true,
+  // defer: true,
 } satisfies Module
 
 export type {

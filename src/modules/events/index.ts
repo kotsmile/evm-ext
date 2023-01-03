@@ -8,7 +8,7 @@ export default {
   tools: (config) => {
     return {
       useEvents: useEvents_config(config),
-      useEventsState: useEventsState(config),
+      useEventsState: () => useEventsState(config),
     }
   },
   init: async (config) => {
@@ -22,9 +22,10 @@ export default {
     logger.info('Initiated')
     return true
   },
+  defer: true,
 } satisfies Module
 
-export const useEvents = (config: EvmConfig) => useEvents_config(config)()
+export const useEvents = (config: EvmConfig) => useEvents_config(config)
 
 export type { EventsState } from './state'
 export type {

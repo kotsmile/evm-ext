@@ -1,5 +1,5 @@
 import { defineEvmConfig } from '@/config'
-import { mockAdapter, mockContractsJSON, type MockContract } from '@/mocks'
+import { mockAdapter, mockContractsJSON, mockState, type MockContract } from '@/mocks'
 import { contractType } from '@/modules/contracts'
 import { typeOf } from '@/utils'
 
@@ -17,7 +17,7 @@ const useEvm = defineEvmConfig({
     on: {},
   },
   adapter: {
-    state: () => ({} as any),
+    state: mockState,
     tools: () => ({
       helloTool: () => {
         console.log('hello world')
