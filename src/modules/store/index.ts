@@ -6,7 +6,7 @@ import { useEvents_config } from '@/modules/events/use'
 import { storeLifecycles } from './type'
 import { logger, onLifecycle } from './utils'
 
-export default {
+export const main = {
   init: async (config) => {
     try {
       const { stores } = config

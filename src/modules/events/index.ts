@@ -4,10 +4,10 @@ import { useEventsState } from './state'
 import { useEvents_config } from './use'
 import { logger } from './utils'
 
-export default {
+export const main = {
   tools: (config) => {
     return {
-      useEvents: useEvents_config(config),
+      useEvents: () => useEvents_config(config),
       useEventsState: () => useEventsState(config),
     }
   },

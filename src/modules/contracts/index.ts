@@ -4,7 +4,7 @@ import type { ContractsJSONStruct, AppChainIds, ContractsDefinition } from './ty
 import { debugInfo, logger } from './utils'
 import { useContractsOnChain_config, useContracts_config } from './use'
 
-export default {
+export const main = {
   tools: <
     ContractsJSON extends ContractsJSONStruct,
     ChainIds extends AppChainIds<ContractsJSON>,

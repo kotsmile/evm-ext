@@ -1,7 +1,8 @@
 import type { EvmConfig, Module } from '@/config/type'
+
 import { getRpc_config, getProvider_config } from './node'
 
-export default {
+export const main = {
   tools: (config: EvmConfig) => {
     return {
       getRpc: getRpc_config(config),

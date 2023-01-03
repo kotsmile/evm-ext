@@ -1,9 +1,9 @@
-import contracts from './contracts'
-import chain from './chain'
-import events from './events'
-import store from './store'
-import state from './state'
-import wallet from './wallet'
+import { main as contracts } from './contracts'
+import { main as chain } from './chain'
+import { main as events } from './events'
+import { main as store } from './store'
+import { main as state } from './state'
+import { main as wallet } from './wallet'
 
 import type { Module } from '@/config/type'
 

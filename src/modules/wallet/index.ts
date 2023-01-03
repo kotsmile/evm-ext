@@ -5,15 +5,15 @@ import type { StoresDefinition } from '@/modules/store'
 
 import type { WalletsDefintion } from './type'
 import { useWallet_config } from './use'
-import { state, useWalletState } from './state'
+import { useWalletState } from './state'
 import { logger } from './utils'
 
-export default {
+export const main = {
   tools: <Wallets extends WalletsDefintion>(
     config: EvmConfig<ContractsJSONStruct, any, any, any, StoresDefinition, Wallets>
   ) => {
     return {
-      useWallet: useWallet_config<Wallets>(config),
+      useWallet: () => useWallet_config<Wallets>(config),
       useWalletState: () => useWalletState(config),
     }
   },

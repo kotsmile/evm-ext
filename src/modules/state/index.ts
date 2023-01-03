@@ -3,8 +3,10 @@ import { keyOf } from '@/utils'
 
 import { logger } from './utils'
 
-const main = {
-  tools: (config: EvmConfig) => ({}),
+export const main = {
+  tools: (config: EvmConfig) => ({
+    createState: config.adapter.state.createState,
+  }),
   init: async (config, modules) => {
     return true
     // try {
@@ -24,4 +26,3 @@ const main = {
     // return true
   },
 } satisfies Module
-export default main
