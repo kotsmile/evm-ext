@@ -6,7 +6,7 @@ import type {
 } from '@/modules/contracts/type'
 import type { StoresDefinition } from '@/modules/store/type'
 import type { WalletsDefintion } from '@/modules/wallet/type'
-import type { Adapter } from '@/adapter'
+import type { AdapterDefinition } from '@/adapter'
 
 import type { EvmConfig, Module } from '@/config/type'
 import { logger } from '@/config/utils'
@@ -14,7 +14,7 @@ import { logger } from '@/config/utils'
 import { keyOf } from '@/utils'
 
 export const defineEvmConfig = <
-  A extends Adapter,
+  A extends AdapterDefinition,
   ContractsJSON extends ContractsJSONStruct,
   ChainIds extends AppChainIds<ContractsJSON>,
   DefaultChainId extends ChainIds[number],

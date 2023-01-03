@@ -1,7 +1,11 @@
-import type { State } from '@/modules/state'
-import type { ToolsFunction } from '@/config/type'
+import type { EvmConfig, ToolsFunction } from '@/config/type'
 
-export type Adapter<AdapterTools = any> = {
-  state: () => State
+export type AdapterDefinition<AdapterTools = any> = {
+  state: {
+    createState<State>(
+      name: string,
+      state: (config: EvmConfig) => State
+    ): (config: EvmConfig) => State
+  }
   tools?: ToolsFunction<AdapterTools>
 }

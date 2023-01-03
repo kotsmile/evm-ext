@@ -34,7 +34,7 @@ export const mockTools = ((config) => ({
 export const mockAdapter = {
   state: mockState,
   tools: mockTools,
-} satisfies adapter.Adapter
+} satisfies adapter.AdapterDefinition
 
 export const mockContractsJSON = {
   '1': [

@@ -2,11 +2,10 @@ import type { EvmConfig, Module } from '@/config/type'
 
 import type { ContractsJSONStruct } from '@/modules/contracts'
 import type { StoresDefinition } from '@/modules/store'
-import { useState } from '@/modules/state'
 
 import type { WalletsDefintion } from './type'
 import { useWallet_config } from './use'
-import { state } from './state'
+import { state, useWalletState } from './state'
 import { logger } from './utils'
 
 export default {
@@ -15,11 +14,12 @@ export default {
   ) => {
     return {
       useWallet: useWallet_config<Wallets>(config),
+      useWalletState: useWalletState(config),
     }
   },
   init: async (config) => {
     try {
-      const { wallet } = useState(config)
+      const wallet = useWalletState(config)
       wallet.chainId = wallet.DEFAULT_CHAINID = config.DEFAULT_CHAINID
       wallet.chainIds = config.chainIds
     } catch (e) {
@@ -29,7 +29,6 @@ export default {
     logger.info('Initiated')
     return true
   },
-  state,
 } satisfies Module
 
 export type {

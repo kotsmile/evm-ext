@@ -5,13 +5,13 @@ import { defineEvmConfig } from '../../config'
 import { useState } from '../../modules/state'
 import type { State } from '../../modules/state'
 
-import type { Adapter } from '../../adapter'
+import type { AdapterDefinition } from '../../adapter'
 
 export let testState: any = {
   wallet: {},
 }
 
-export const testAdapter: Adapter = {
+export const testAdapter: AdapterDefinition = {
   state: () =>
     <any>{
       wallet: new Proxy({} as State['wallet'], {

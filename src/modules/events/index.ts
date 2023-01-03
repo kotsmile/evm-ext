@@ -1,6 +1,6 @@
 import type { EvmConfig, Module } from '@/config/type'
 
-import { state } from './state'
+import { useEventsState } from './state'
 import { useEvents_config } from './use'
 import { logger } from './utils'
 
@@ -8,6 +8,7 @@ export default {
   tools: (config) => {
     return {
       useEvents: useEvents_config(config),
+      useEventsState: useEventsState(config),
     }
   },
   init: async (config) => {
@@ -21,7 +22,6 @@ export default {
     logger.info('Initiated')
     return true
   },
-  state,
 } satisfies Module
 
 export const useEvents = (config: EvmConfig) => useEvents_config(config)()

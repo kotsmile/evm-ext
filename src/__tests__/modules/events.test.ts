@@ -1,4 +1,4 @@
-import type { Adapter } from '@/adapter'
+import type { AdapterDefinition } from '@/adapter'
 import { defineEvmConfig } from '@/config'
 
 describe('Events Module', () => {
@@ -8,7 +8,7 @@ describe('Events Module', () => {
       events: {},
     }
 
-    const testAdapter: Adapter = {
+    const testAdapter: AdapterDefinition = {
       state: () => state,
     }
 

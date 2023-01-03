@@ -1,26 +1,24 @@
 import { wrapState, type ISigner, type WrapState } from '@/utils'
 import type { ChainId } from '@/utils/chain'
-import type { StateFunction } from '@/config/type'
+import type { EvmConfig, StateFunction } from '@/config/type'
 
 import type { WalletHandler } from './wallets/base'
 
 export type WalletState = {
-  wallet: {
-    wallet: string
-    signer: WrapState<ISigner>
-    chainId: ChainId
-    realChainId: ChainId | null
-    chainIds: ChainId[]
-    DEFAULT_CHAINID: ChainId
-    login: boolean
-    loading: boolean
-    walletType: string | null
-    walletHandler: WrapState<WalletHandler | null>
-  }
+  wallet: string
+  signer: WrapState<ISigner>
+  chainId: ChainId
+  realChainId: ChainId | null
+  chainIds: ChainId[]
+  DEFAULT_CHAINID: ChainId
+  login: boolean
+  loading: boolean
+  walletType: string | null
+  walletHandler: WrapState<WalletHandler | null>
 }
 
 const DEF_CHAINID: ChainId = '1'
-export const state: StateFunction<'wallet', WalletState> = (config) => {
+export const state: StateFunction<WalletState> = (config) => {
   return {
     wallet: '',
     signer: wrapState(null),
@@ -34,3 +32,6 @@ export const state: StateFunction<'wallet', WalletState> = (config) => {
     walletHandler: wrapState(null),
   }
 }
+
+export const useWalletState = (config: EvmConfig) =>
+  config.adapter.state.createState('$wallet', state)(config)

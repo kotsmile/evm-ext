@@ -7,7 +7,7 @@ import type { StoresDefinition } from '@/modules/store/type'
 import type { RpcDefinition } from '@/modules/chain/type'
 import type { Options, WalletsDefintion } from '@/modules/wallet'
 
-import type { Adapter } from '@/adapter'
+import type { AdapterDefinition } from '@/adapter'
 
 export type EvmConfig<
   ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
@@ -16,7 +16,7 @@ export type EvmConfig<
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]> = any,
   Stores extends StoresDefinition = StoresDefinition,
   Wallets extends WalletsDefintion = WalletsDefintion,
-  A extends Adapter = Adapter
+  Adapter extends AdapterDefinition = AdapterDefinition
 > = {
   /// deployed contracts
   readonly contractsJSON?: ContractsJSON
@@ -30,7 +30,7 @@ export type EvmConfig<
   readonly stores?: Stores
   readonly wallets?: Wallets
 
-  adapter: A
+  adapter: Adapter
   options?: Options
   DEBUG?: boolean
 }
@@ -41,14 +41,10 @@ export type InitFunction = (
 ) => Promise<boolean>
 export type ToolsFunction<R = any> = (config: EvmConfig) => R
 
-export type StateFunction<
-  N extends string = string,
-  S extends Record<N, Record<string, any>> = any
-> = (config: EvmConfig) => S[N]
+export type StateFunction<S extends Record<string, any> = any> = (config: EvmConfig) => S
 
 export type Module = {
   tools?: ToolsFunction
   init?: InitFunction
   defer?: boolean
-  state?: StateFunction
 }
