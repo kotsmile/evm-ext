@@ -4,9 +4,10 @@ import type { EvmConfig } from '@/config/type'
 import { getChainTag, type ChainId } from '@/utils/chain'
 
 import { logger } from './utils'
+import type { ChainModuleConfig } from './type'
 
-export const getRpc_config = (config: EvmConfig) => {
-  const rpcFunction = config.rpc
+export const getRpc_config = (_: EvmConfig, chainConfig: ChainModuleConfig) => {
+  const rpcFunction = chainConfig.rpc
   if (!rpcFunction) {
     logger.warn('No rpc function in config')
     return () => '__NO_RCP__'
@@ -14,7 +15,7 @@ export const getRpc_config = (config: EvmConfig) => {
   return (chainId: ChainId) => rpcFunction(getChainTag(chainId)) ?? '__NO_RPC__'
 }
 
-export const getProvider_config = (config: EvmConfig) => {
+export const getProvider_config = (config: EvmConfig, chainConfig: ChainModuleConfig) => {
   return (chainId: ChainId) =>
-    new providers.JsonRpcProvider(getRpc_config(config)(chainId))
+    new providers.JsonRpcProvider(getRpc_config(config, chainConfig)(chainId))
 }
