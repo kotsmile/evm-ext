@@ -22,15 +22,14 @@ export const defineEvmConfig = <M extends Record<string, Module> = {}>(
   /// TODO: fix empty modules type problem
   const tools = {} as {
     [K in keyof M]: RT<M[K]['tools']>
-  }[keyof M]
+  }
+
   // init tools
-  for (const name of keyOf(config.modules)) {
-    const module = config.modules[name]
+  for (const moduleName of keyOf(config.modules)) {
+    const module = config.modules[moduleName]
     if (!module.tools) continue
-    for (const [name, moduleTools] of entries(module.tools(config))) {
-      /// @ts-ignore(config)
-      tools[name] = moduleTools
-    }
+    /// @ts-ignore
+    tools[moduleName] = module.tools(config)
   }
 
   return () => ({

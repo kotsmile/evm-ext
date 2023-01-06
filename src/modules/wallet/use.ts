@@ -12,11 +12,12 @@ import type { StoresDefinition } from '@/modules/store'
 
 import type { UpdateParams } from './wallets/base'
 import { logger } from './utils'
-import type { WalletsDefintion } from './type'
+import type { WalletModuleConfig, WalletsDefintion } from './type'
 import { useWalletState } from './state'
 
-export const useWallet_config = <Wallets extends WalletsDefintion>(
-  config: EvmConfig<ContractsJSONStruct, any, any, any, StoresDefinition, Wallets>
+export const useWallet_config = <WC extends WalletModuleConfig>(
+  config: EvmConfig,
+  walletConfig: WC
 ) => {
   return {
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {
@@ -29,8 +30,11 @@ export const useWallet_config = <Wallets extends WalletsDefintion>(
       walletState.realChainId = chainId as ChainId
       walletState.login = login
     },
-    async connect(walletType: Cast<keyof Wallets | null, string>, chainId?: ChainId) {
-      const { wallets } = config
+    async connect(
+      walletType: Cast<keyof WC['wallets'] | null, string>,
+      chainId?: ChainId
+    ) {
+      const { wallets } = walletConfig
       if (!wallets) return logger.warn('No wallets provided')
       if (!walletType) return
 

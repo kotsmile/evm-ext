@@ -11,3 +11,7 @@ export type StoreDefinition = {
   isLoading: () => Promise<boolean>
 }
 export type StoresDefinition = Record<string, StoreDefinition>
+
+export type StoreModuleConfig = {
+  stores: StoresDefinition
+}

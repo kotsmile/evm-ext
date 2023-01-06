@@ -1,6 +1,4 @@
 import type { ChainTag } from '@/utils/chain'
 
 export type RpcDefinition = (chainTag: ChainTag) => string
-export type ChainModuleConfig = {
-  rpc: RpcDefinition
-}
+export type ChainModuleConfig = RpcDefinition

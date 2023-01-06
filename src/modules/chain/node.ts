@@ -7,7 +7,7 @@ import { logger } from './utils'
 import type { ChainModuleConfig } from './type'
 
 export const getRpc_config = (_: EvmConfig, chainConfig: ChainModuleConfig) => {
-  const rpcFunction = chainConfig.rpc
+  const rpcFunction = chainConfig
   if (!rpcFunction) {
     logger.warn('No rpc function in config')
     return () => '__NO_RCP__'
