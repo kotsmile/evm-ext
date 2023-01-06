@@ -14,4 +14,4 @@ type RemoveAbstract<C extends abstract new (...args: any) => any> = new (
 ) => InstanceType<C>
 
 export type WalletsDefintion = Record<string, RemoveAbstract<typeof WalletHandler>>
-export type WalletModuleConfig = { wallets: WalletsDefintion }
+export type WalletModuleConfig = { wallets: WalletsDefintion; options: Options }

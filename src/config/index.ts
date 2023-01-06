@@ -14,8 +14,14 @@ import { logger } from '@/config/utils'
 import { disableLogger, entries, keyOf } from '@/utils'
 import type { RT } from '@/utils/type'
 
-export const defineEvmConfig = <M extends Record<string, Module> = {}>(
-  config: EvmConfig<M>
+export const defineEvmConfig = <
+  M extends Record<string, Module> = {},
+  ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
+  ChainIds extends AppChainIds<ContractsJSON> = any,
+  DefaultChainId extends ChainIds[number] = any,
+  Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]> = any
+>(
+  config: EvmConfig<M, ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   if (config.DEBUG === false) disableLogger()
 

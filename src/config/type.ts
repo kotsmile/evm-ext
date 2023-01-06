@@ -1,7 +1,27 @@
 import type { AdapterDefinition } from '@/adapter'
 
-export type EvmConfig<Modules extends Record<string, Module> = {}> = {
+import type {
+  AppChainIds,
+  ContractsDefinition,
+  ContractsJSONStruct,
+} from '@/modules/contracts'
+
+export type EvmConfig<
+  Modules extends Record<string, Module> = Record<string, Module>,
+  ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
+  ChainIds extends AppChainIds<ContractsJSON> = any,
+  DefaultChainId extends ChainIds[number] = any,
+  Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]> = any
+> = {
   DEBUG?: boolean
+  /// deployed contracts
+  readonly contractsJSON?: ContractsJSON
+  /// dapp support chainids
+  readonly chainIds?: ChainIds
+  readonly DEFAULT_CHAINID?: DefaultChainId
+  /// contracts
+  readonly contracts?: Contracts
+  /// stores
   adapter: AdapterDefinition
   readonly modules: Modules
 }

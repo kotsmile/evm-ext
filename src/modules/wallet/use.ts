@@ -46,16 +46,17 @@ export const useWallet_config = <WC extends WalletModuleConfig>(
 
       const walletHandler = new wallets[walletType](
         config,
+        walletConfig,
         config.chainIds,
         walletState.chainId,
         this.updateStoreState,
         (wallet) => {
           useEvents(config).emit('onWalletChange', { wallet })
-          if (config.options?.updateOnWalletChange) this.loadAll({ login: true })
+          if (walletConfig.options?.updateOnWalletChange) this.loadAll({ login: true })
         },
         (chainId) => {
           useEvents(config).emit('onChainChange', { chainId, natural: true })
-          if (config.options?.updateOnChainChange)
+          if (walletConfig.options?.updateOnChainChange)
             this.loadAll({ init: true, login: true })
         }
       )

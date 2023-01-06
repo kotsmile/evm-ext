@@ -6,6 +6,7 @@ import type { ISigner } from '@/utils'
 import type { ChainId } from '@/utils/chain'
 
 import { events } from './utils'
+import type { WalletModuleConfig } from '../type'
 
 export type ConnectFunction = (
   wallet: string,
@@ -35,6 +36,7 @@ export abstract class WalletHandler {
 
   constructor(
     public config: EvmConfig,
+    public walletConfig: WalletModuleConfig,
     public chainIds: readonly ChainId[],
     public defaultChainId: ChainId,
     public updateStoreState: UpdateStoreStateFunction,
@@ -66,7 +68,7 @@ export abstract class WalletHandler {
     chainId = parseInt(chainId.toString())
     if (this.chainId && parseInt(this.chainId) === chainId) return
 
-    if (!this.config.options?.preventDefaultChangeChain) {
+    if (!this.walletConfig.options?.preventDefaultChangeChain) {
       await this.updateProviderState()
       if (!this.chainIds.includes(chainId.toString() as ChainId))
         return await this.switchChain(this.defaultChainId)
@@ -79,7 +81,7 @@ export abstract class WalletHandler {
     this.nativeProvider.once(events.CHANGE_WALLET, this.changeWalletHanlder?.bind(this))
 
     if (accounts[0] === this.address) return
-    if (!this.config.options?.preventDefaultChangeWallet) {
+    if (!this.walletConfig.options?.preventDefaultChangeWallet) {
       await this.updateProviderState()
     }
     this.changeWalletCallback?.(accounts[0])
