@@ -5,12 +5,10 @@ import { useEvents_config } from './use'
 import { logger } from './utils'
 
 export const main = {
-  tools: (config) => {
-    return {
-      useEvents: () => useEvents_config(config),
-      useEventsState: () => useEventsState(config),
-    }
-  },
+  tools: (config) => ({
+    useEvents: () => useEvents_config(config),
+    useEventsState: () => useEventsState(config),
+  }),
   init: async (config) => {
     try {
       const events = useEvents(config)
@@ -39,3 +37,5 @@ export type {
   RawEvents,
 } from './type'
 export { toAfterEvent, toBeforeEvent } from './utils'
+
+export default main

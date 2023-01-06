@@ -1,25 +1,21 @@
 import type { AdapterDefinition } from '@/adapter'
 
-export type EvmConfig<Modules extends Module[] = Module[]> = {
+export type EvmConfig<Modules extends Record<string, Module> = {}> = {
   DEBUG?: boolean
   adapter: AdapterDefinition
-  modules: Modules
+  readonly modules: Modules
 }
 
-export type InitFunction = (
-  config: EvmConfig,
-  modules: Record<string, Module>
-) => Promise<boolean>
+export type InitFunction = (config: EvmConfig) => Promise<boolean>
 
 export type ToolsFunction<
-  M extends Module[] = Module[],
+  M extends Record<string, Module> = {},
   R extends Record<string, any> = Record<string, any>
 > = (config: EvmConfig<M>) => R
 
 export type StateFunction<S extends Record<string, any> = any> = (config: EvmConfig) => S
 
 export type Module = {
-  name: string
   tools?: ToolsFunction
   init?: InitFunction
   defer?: boolean

@@ -5,7 +5,6 @@ import { getRpc_config, getProvider_config } from './node'
 
 export const main = (chainConfig: ChainModuleConfig) =>
   ({
-    name: 'Chain',
     tools: (config: EvmConfig) => ({
       getRpc: getRpc_config(config, chainConfig),
       getProvider: getProvider_config(config, chainConfig),
