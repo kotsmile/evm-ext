@@ -7,7 +7,7 @@ import type {
 } from '@/modules/contracts'
 
 export type EvmConfig<
-  Modules extends Record<string, Module> = Record<string, Module>,
+  Modules extends Record<string, Module<any, any>> = Record<string, Module<any, any>>,
   ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
   ChainIds extends AppChainIds<ContractsJSON> = any,
   DefaultChainId extends ChainIds[number] = any,
@@ -22,21 +22,30 @@ export type EvmConfig<
   /// contracts
   readonly contracts?: Contracts
   /// stores
-  adapter: AdapterDefinition
+  readonly adapter: AdapterDefinition
   readonly modules: Modules
 }
 
 export type InitFunction = (config: EvmConfig) => Promise<boolean>
-
-export type ToolsFunction<
-  M extends Record<string, Module> = {},
-  R extends Record<string, any> = Record<string, any>
-> = (config: EvmConfig<M>) => R
+export type ToolsFunction = (config: EvmConfig) => Record<string, any>
 
 export type StateFunction<S extends Record<string, any> = any> = (config: EvmConfig) => S
 
-export type Module = {
-  tools?: ToolsFunction
+export type Module<
+  Config extends any = {},
+  TF extends ToolsFunction | undefined = undefined
+> = {
+  config: Config
+  readonly tools?: TF
   init?: InitFunction
   defer?: boolean
+}
+
+export type ModuleDefinition<
+  Name extends string,
+  Config extends any = {},
+  TF extends ToolsFunction | undefined = undefined
+> = {
+  name: Name
+  setup: (config: Config) => Omit<Module<Config, TF>, 'config'>
 }

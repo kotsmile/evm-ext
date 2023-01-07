@@ -63,7 +63,7 @@ export const useContracts_config = <
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
-  config: EvmConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts>
+  config: EvmConfig<any, ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   return (signer?: INotNullSigner) => {
     if (!config.DEFAULT_CHAINID) {
@@ -97,7 +97,7 @@ export const useContractsOnChain_config = <
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
-  config: EvmConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts>
+  config: EvmConfig<any, ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   return <CurrentChainId extends ChainIds[number]>(
     chainId: CurrentChainId,

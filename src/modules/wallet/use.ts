@@ -15,9 +15,9 @@ import { logger } from './utils'
 import type { WalletModuleConfig, WalletsDefintion } from './type'
 import { useWalletState } from './state'
 
-export const useWallet_config = <WC extends WalletModuleConfig>(
+export const useWallet_config = <WC extends WalletsDefintion>(
   config: EvmConfig,
-  walletConfig: WC
+  walletConfig: WalletModuleConfig<WC>
 ) => {
   return {
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {

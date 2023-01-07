@@ -4,6 +4,8 @@ import { defineEvmConfig } from '@/config'
 import chain from '@/modules/chain'
 import events from '@/modules/events'
 import store from '@/modules/store'
+import wallet from '@/modules/wallet'
+import contracts from '@/modules/contracts'
 
 import { ankrRpc } from '@/utils/chain/rpc'
 
@@ -16,20 +18,32 @@ const useEvm = defineEvmConfig({
     shared: {
       token: {
         name: 'Vesting',
-        withAddress: true,
       },
     },
     on: {},
   },
   modules: {
-    chain: chain(ankrRpc()),
-    events,
-    store: store({
+    [chain.name]: chain.setup(ankrRpc()),
+    [events.name]: events.setup({}),
+    [store.name]: store.setup({
       stores: {},
+    }),
+    [contracts.name]: contracts.setup({}),
+    [wallet.name]: wallet.setup({
+      wallets: {
+        test: {} as any,
+      },
+      options: {},
     }),
   },
   adapter: mockAdapter,
 })
 
-const { config, init, chain: c, events: e } = useEvm()
+const { chain: c, events: e, wallet: w, contracts: con, config } = useEvm()
 const { useEvents, useEventsState } = e
+const { getProvider, getRpc } = c
+const { useWallet } = w
+const { useContracts } = con
+
+const {} = useContracts()
+useWallet().connect('test')

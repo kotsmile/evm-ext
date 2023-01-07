@@ -36,7 +36,7 @@ export abstract class WalletHandler {
 
   constructor(
     public config: EvmConfig,
-    public walletConfig: WalletModuleConfig,
+    public walletConfig: WalletModuleConfig<any>,
     public chainIds: readonly ChainId[],
     public defaultChainId: ChainId,
     public updateStoreState: UpdateStoreStateFunction,

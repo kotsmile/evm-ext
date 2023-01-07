@@ -1,4 +1,3 @@
-import modules from '@/modules'
 import type {
   ContractsJSONStruct,
   ContractsDefinition,
@@ -15,11 +14,11 @@ import { disableLogger, entries, keyOf } from '@/utils'
 import type { RT } from '@/utils/type'
 
 export const defineEvmConfig = <
-  M extends Record<string, Module> = {},
-  ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
-  ChainIds extends AppChainIds<ContractsJSON> = any,
-  DefaultChainId extends ChainIds[number] = any,
-  Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]> = any
+  M extends Record<string, Module<any, any>>,
+  ContractsJSON extends ContractsJSONStruct,
+  ChainIds extends AppChainIds<ContractsJSON>,
+  DefaultChainId extends ChainIds[number],
+  Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
   config: EvmConfig<M, ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
