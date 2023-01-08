@@ -1,4 +1,4 @@
-import { mockAdapter, mockContractsJSON } from '@/mocks'
+import { mockAdapter, MockContract, mockContractsJSON } from '@/mocks'
 import { defineEvmConfig } from '@/config'
 
 import chain from '@/modules/chain'
@@ -12,6 +12,7 @@ import type { RemoveAbstract } from '@/utils/type'
 import { MockWallet } from '@/modules/wallet/wallets/base'
 import type { EvmConfig } from '@/config/type'
 import type { WalletModuleConfig } from '@/modules/wallet/type'
+import { typeOf } from '@/utils'
 
 const useEvm = defineEvmConfig({
   DEBUG: true,
@@ -29,6 +30,8 @@ const useEvm = defineEvmConfig({
         shared: {
           token: {
             name: 'Vesting',
+            type: typeOf<MockContract>(),
+            withAddress: true,
           },
         },
         on: {},

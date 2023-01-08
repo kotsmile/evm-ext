@@ -14,16 +14,19 @@ export const defineEvmConfig = <M extends Record<string, Module>>(
   }
 
   // init tools
-  for (const moduleName of keyOf(config.modules)) {
-    const module = config.modules[moduleName]
-    if (!module.tools) continue
-    /// @ts-ignore
-    tools[moduleName] = module.tools(config)
-  }
+  if (config.modules)
+    for (const moduleName of keyOf(config.modules)) {
+      const module = config.modules[moduleName]
+      if (!module.tools) continue
+      /// @ts-ignore
+      tools[moduleName] = module.tools(config)
+    }
 
   return () => ({
     /// inits every module
     init: async () => {
+      if (!config.modules) return
+
       logger.info('Init modules')
 
       /// TODO same code :((

@@ -16,6 +16,9 @@ export const useModule = <Name extends string, M extends Module>(
   module: (...args: any[]) => Record<Name, M>
 ) => {
   const name = getModuleName(module)
+
+  if (!config.modules) return undefined
+
   if (name in config.modules) {
     return config.modules[name].tools?.(config) as RT<M['tools']>
   } else {

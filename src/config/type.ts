@@ -10,7 +10,7 @@ export type EvmConfig<Modules extends Record<string, Module> = Record<string, Mo
   DEBUG?: boolean
 
   readonly adapter: AdapterDefinition
-  readonly modules: Modules
+  readonly modules?: Modules
 }
 
 export type InitFunction = (config: EvmConfig) => Promise<boolean>
@@ -23,3 +23,4 @@ export type Module = {
   init?: InitFunction
   defer?: boolean
 }
+export type ModuleDefinition = Record<string, Module>
