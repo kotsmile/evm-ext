@@ -64,5 +64,5 @@ export const mockContractsJSON = {
 } satisfies ContractsJSONStruct
 
 export interface MockContract extends BaseContract {
-  _mock: 'hello'
+  _mock: 'mock'
 }

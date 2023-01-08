@@ -47,5 +47,7 @@ const { getProvider, getRpc } = c
 const { useWallet } = w
 const { useContracts } = con
 
-const {} = useContracts()
+const { token } = useContracts()
+const a: 'mock' = token('')._mock
+
 useWallet().connect('test')
