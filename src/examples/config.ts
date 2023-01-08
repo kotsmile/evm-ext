@@ -1,47 +1,41 @@
 import { mockAdapter, MockContract, mockContractsJSON } from '@/mocks'
+
 import { defineEvmConfig } from '@/config'
+import { defaultModules } from '@/modules'
 
-import chain from '@/modules/chain'
-import events from '@/modules/events'
-import store from '@/modules/store'
-import wallet, { WalletHandler } from '@/modules/wallet'
-import contracts from '@/modules/contracts'
+import { ankrRpc, typeOf } from '@/utils'
 
-import { ankrRpc } from '@/utils/chain/rpc'
-import type { RemoveAbstract } from '@/utils/type'
-import { MockWallet } from '@/modules/wallet/wallets/base'
-import type { EvmConfig } from '@/config/type'
-import type { WalletModuleConfig } from '@/modules/wallet/type'
-import { typeOf } from '@/utils'
+import { MockWallet } from '@/modules/wallet'
 
 const useEvm = defineEvmConfig({
   DEBUG: true,
   modules: {
-    ...chain(ankrRpc()),
-    ...events(),
-    ...store({
-      stores: {},
-    }),
-    ...contracts({
-      contractsJSON: mockContractsJSON,
-      chainIds: ['56'],
-      DEFAULT_CHAINID: '56',
+    ...defaultModules({
+      chain: ankrRpc(),
       contracts: {
-        shared: {
-          token: {
-            name: 'Vesting',
-            type: typeOf<MockContract>(),
-            withAddress: true,
+        contractsJSON: mockContractsJSON,
+        chainIds: ['56'],
+        DEFAULT_CHAINID: '56',
+        contracts: {
+          shared: {
+            token: {
+              name: 'Vesting',
+              type: typeOf<MockContract>(),
+              withAddress: true,
+            },
           },
+          on: {},
         },
-        on: {},
       },
-    }),
-    ...wallet({
-      wallets: {
-        test: MockWallet,
+      wallet: {
+        wallets: {
+          test: MockWallet,
+        },
+        options: {},
       },
-      options: {},
+      store: {
+        stores: {},
+      },
     }),
   },
   adapter: mockAdapter,
@@ -53,4 +47,5 @@ const { getProvider, getRpc } = c
 const { useWallet } = w
 const { useContracts } = con
 
-const { token } = useContracts()
+const {} = useContracts()
+useWallet().connect('test')

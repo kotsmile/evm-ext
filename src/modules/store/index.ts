@@ -33,6 +33,9 @@ export default (storeConfig: StoreModuleConfig) => ({
       logger.info('Initiated')
       return true
     },
+    tools: () => ({
+      getStoreConfig: () => storeConfig,
+    }),
   } satisfies Module,
 })
 

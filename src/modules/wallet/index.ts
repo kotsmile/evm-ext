@@ -1,23 +1,26 @@
-import type { WalletModuleConfig, WalletsDefintion } from './type'
+import type { WalletModuleConfig } from './type'
+
+import type { ChainId } from '@/utils/chain'
 
 import { useWallet_config } from './use'
 import { useWalletState } from './state'
-
 import { logger } from './utils'
+
 import type { Module } from '@/config/type'
+
 import { useModule } from '@/config/utils'
-import contractsModule from '@/modules/contracts'
-import type { ChainId } from '@/utils/chain'
+import { ContractsModule } from '@/modules'
 
 export const walletModule = <WC extends WalletModuleConfig>(walletConfig: WC) => ({
   wallet: {
     tools: (config) => ({
       useWallet: () => useWallet_config<WC>(config, walletConfig),
       useWalletState: () => useWalletState(config),
+      getWalletConfig: () => walletConfig,
     }),
     init: async (config) => {
       try {
-        const contracts = useModule(config, contractsModule)
+        const contracts = useModule(config, ContractsModule)
         if (!contracts) return false
 
         const wallet = useWalletState(config)
@@ -37,13 +40,9 @@ export const walletModule = <WC extends WalletModuleConfig>(walletConfig: WC) =>
 
 export default walletModule
 
-export type {
-  ChangeChainCallbackFunction,
-  ChangeWalletCallbackFunction,
-  ConnectFunction,
-  UpdateStoreStateFunction,
-  WalletHandler,
-} from './wallets/base'
+export * from './wallets/base'
+export * from './wallets/utils'
 
-export type { WalletsDefintion, Options } from './type'
-export type { WalletState } from './state'
+export * from './type'
+export * from './state'
+export * from './use'
