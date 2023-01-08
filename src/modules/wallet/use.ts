@@ -7,8 +7,6 @@ import type { ChainId } from '@/utils/chain'
 import type { Cast } from '@/utils/type'
 
 import { useEvents } from '@/modules/events'
-import type { ContractsJSONStruct } from '@/modules/contracts'
-import type { StoresDefinition } from '@/modules/store'
 
 import type { UpdateParams } from './wallets/base'
 import { logger } from './utils'

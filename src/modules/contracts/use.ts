@@ -13,10 +13,12 @@ import type {
   ContractsJSONStruct,
   ContractsDefinition,
   ContractDefinition,
+  ContractsConfig,
 } from './type'
 
-import { getProvider_config } from '@/modules/chain/node'
+import chainModule from '@/modules/chain'
 import { logger } from './utils'
+import { useModule } from '@/config/utils'
 
 export type DefaultContract<T, D> = T extends undefined ? D : T
 
@@ -50,8 +52,12 @@ export const genContractObjects = (
   for (const contractName of keyOf(contracts)) {
     const { name, withAddress } = contracts[contractName]
     const { abi, address } = allContracts[name.toString()]
+
+    const chain = useModule(config, chainModule)
+    if (!chain) return obj
+
     const cFunc = (address: string, chainId: ChainId) =>
-      new Contract(address, abi, signer ?? getProvider_config(config)(chainId))
+      new Contract(address, abi, signer ?? chain.getProvider(chainId))
     obj[contractName] = withAddress ? cFunc : cFunc(address, chainId as ChainId)
   }
   return obj
@@ -63,28 +69,29 @@ export const useContracts_config = <
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
-  config: EvmConfig<any, ContractsJSON, ChainIds, DefaultChainId, Contracts>
+  config: EvmConfig,
+  contractsConfig: ContractsConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   return (signer?: INotNullSigner) => {
-    if (!config.DEFAULT_CHAINID) {
+    if (!contractsConfig.DEFAULT_CHAINID) {
       logger.warn('No `DEFAULT_CHAINID` in config')
       return {} as UseContracts<Contracts['shared'], ChainIds[number]>
     }
 
-    const chainId = config.DEFAULT_CHAINID // TODO: get actual chainId from web3 store like
+    const chainId = contractsConfig.DEFAULT_CHAINID // TODO: get actual chainId from web3 store like
 
-    if (!config.contractsJSON) {
+    if (!contractsConfig.contractsJSON) {
       logger.warn('No `contractsJSON` in config')
       return {} as UseContracts<Contracts['shared'], ChainIds[number]>
     }
 
-    const contractsJSON = config.contractsJSON
+    const contractsJSON = contractsConfig.contractsJSON
     const allContracts = contractsJSON[chainId][0].contracts ?? {}
 
     return genContractObjects(
       config,
       chainId as ChainId,
-      config.contracts?.shared ?? {},
+      contractsConfig.contracts?.shared ?? {},
       allContracts,
       signer
     ) as UseContracts<Contracts['shared'], ChainIds[number]>
@@ -97,13 +104,14 @@ export const useContractsOnChain_config = <
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
-  config: EvmConfig<any, ContractsJSON, ChainIds, DefaultChainId, Contracts>
+  config: EvmConfig,
+  contractsConfig: ContractsConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   return <CurrentChainId extends ChainIds[number]>(
     chainId: CurrentChainId,
     signer?: INotNullSigner
   ) => {
-    if (!config.contractsJSON) {
+    if (!contractsConfig.contractsJSON) {
       logger.warn('No `contractsJSON` in config')
       return {} as UseContracts<
         Cast<
@@ -114,13 +122,13 @@ export const useContractsOnChain_config = <
       >
     }
 
-    const contractsJSON = config.contractsJSON
+    const contractsJSON = contractsConfig.contractsJSON
     const allContracts = contractsJSON[chainId][0].contracts
 
     return genContractObjects(
       config,
       chainId as ChainId,
-      config.contracts?.on[chainId] ??
+      contractsConfig.contracts?.on[chainId] ??
         ({} as Record<string, ContractDefinition<any, any>>),
       allContracts,
       signer

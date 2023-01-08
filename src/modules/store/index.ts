@@ -1,13 +1,13 @@
 import { entries } from '@/utils'
+import type { Module } from '@/config/type'
+
 import { useEvents_config } from '@/modules/events/use'
 
 import { storeLifecycles, StoreModuleConfig } from './type'
 import { logger, onLifecycle } from './utils'
-import { defineModule } from '@/config/utils'
 
-export const storeModule = defineModule({
-  name: 'store',
-  setup: (storeConfig: StoreModuleConfig) => ({
+export const storeModule = (storeConfig: StoreModuleConfig) => ({
+  store: {
     init: async (config) => {
       try {
         const { stores } = storeConfig
@@ -32,16 +32,10 @@ export const storeModule = defineModule({
       logger.info('Initiated')
       return true
     },
-  }),
+  } satisfies Module,
 })
 
-export type {
-  OnStoreLifecycle,
-  StoreDefinition,
-  StoreLifecycle,
-  StoreLifecycleCallback,
-  StoresDefinition,
-  StoreModuleConfig,
-} from './type'
+export * from './type'
+export * from './utils'
 
 export default storeModule

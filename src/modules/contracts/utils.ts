@@ -3,13 +3,15 @@ import { ethers } from 'ethers'
 import { createLogger } from '@/utils'
 import type { EvmConfig } from '@/config/type'
 
-import { getRpc_config } from '@/modules/chain/node'
+import type { ContractsConfig } from './type'
+import { useModule } from '@/config/utils'
+import chainModule from '@/modules/chain'
 
 export const contractType = <C>(): C => ({} as C)
 export const logger = createLogger('Contracts Module')
 
-export const getContracts = (config: EvmConfig) => {
-  const contracts = config.contractsJSON
+export const getContracts = (config: EvmConfig, contractsConfig: ContractsConfig) => {
+  const contracts = contractsConfig.contractsJSON
   if (!contracts) return
 
   try {
@@ -35,8 +37,8 @@ export const getContracts = (config: EvmConfig) => {
   }
 }
 
-export const debugInfo = (config: EvmConfig) => {
-  const contractsAll = getContracts(config)
+export const debugInfo = (config: EvmConfig, contractsConfig: ContractsConfig) => {
+  const contractsAll = getContracts(config, contractsConfig)
   if (!contractsAll) return
 
   for (const chainName of Object.keys(contractsAll)) {
@@ -53,8 +55,11 @@ export const debugInfo = (config: EvmConfig) => {
     console.groupEnd()
   }
 
-  for (const chainId of config.chainIds)
-    console.log(chainId, getRpc_config(config)(chainId))
+  const chain = useModule(config, chainModule)
+  if (!chain) return
+
+  for (const chainId of contractsConfig.chainIds)
+    console.log(chainId, chain.getRpc(chainId))
 
   // console.log('')
   // console.log("Pretend user: \n%cprentend('user address')", 'font-family: monospace')

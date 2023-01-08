@@ -1,26 +1,11 @@
-import type {
-  ContractsJSONStruct,
-  ContractsDefinition,
-  AppChainIds,
-} from '@/modules/contracts/type'
-import type { StoresDefinition } from '@/modules/store/type'
-import type { WalletsDefintion } from '@/modules/wallet/type'
-import type { AdapterDefinition } from '@/adapter'
-
 import type { EvmConfig, Module } from '@/config/type'
 import { logger } from '@/config/utils'
 
 import { disableLogger, entries, keyOf } from '@/utils'
 import type { RT } from '@/utils/type'
 
-export const defineEvmConfig = <
-  M extends Record<string, Module<any, any>>,
-  ContractsJSON extends ContractsJSONStruct,
-  ChainIds extends AppChainIds<ContractsJSON>,
-  DefaultChainId extends ChainIds[number],
-  Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
->(
-  config: EvmConfig<M, ContractsJSON, ChainIds, DefaultChainId, Contracts>
+export const defineEvmConfig = <M extends Record<string, Module>>(
+  config: EvmConfig<M>
 ) => {
   if (config.DEBUG === false) disableLogger()
 

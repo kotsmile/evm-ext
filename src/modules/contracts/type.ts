@@ -50,3 +50,17 @@ export type ContractsDefinition<
   shared: ContractsDefinitionShared<ContractsJSON, ChainId>
   on: ContractsDefinitionOnChain<ContractsJSON, ChainId>
 }
+export type ContractsConfig<
+  ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
+  ChainIds extends AppChainIds<ContractsJSON> = any,
+  DefaultChainId extends ChainIds[number] = any,
+  Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]> = any
+> = {
+  /// deployed contracts
+  readonly contractsJSON?: ContractsJSON
+  /// dapp support chainids
+  readonly chainIds?: ChainIds
+  readonly DEFAULT_CHAINID?: DefaultChainId
+  /// contracts
+  readonly contracts?: Contracts
+}

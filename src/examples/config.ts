@@ -11,39 +11,40 @@ import { ankrRpc } from '@/utils/chain/rpc'
 
 const useEvm = defineEvmConfig({
   DEBUG: true,
-  contractsJSON: mockContractsJSON,
-  chainIds: ['56'],
-  DEFAULT_CHAINID: '56',
-  contracts: {
-    shared: {
-      token: {
-        name: 'Vesting',
-      },
-    },
-    on: {},
-  },
   modules: {
-    [chain.name]: chain.setup(ankrRpc()),
-    [events.name]: events.setup({}),
-    [store.name]: store.setup({
+    ...chain(ankrRpc()),
+    ...events(),
+    ...store({
       stores: {},
     }),
-    [contracts.name]: contracts.setup({}),
-    [wallet.name]: wallet.setup({
-      wallets: {
-        test: {} as any,
+    ...contracts({
+      contractsJSON: mockContractsJSON,
+      chainIds: ['56'],
+      DEFAULT_CHAINID: '56',
+      contracts: {
+        shared: {
+          token: {
+            name: 'Vesting',
+          },
+        },
+        on: {},
       },
-      options: {},
     }),
+    // ...wallet.setup({
+    //   wallets: {
+    //     test: {} as any,
+    //   },
+    //   options: {},
+    // }),
   },
   adapter: mockAdapter,
 })
 
-const { chain: c, events: e, wallet: w, contracts: con, config } = useEvm()
+const { chain: c, events: e, contracts: con, config } = useEvm()
 const { useEvents, useEventsState } = e
 const { getProvider, getRpc } = c
-const { useWallet } = w
+// const { useWallet } = w
 const { useContracts } = con
 
-const {} = useContracts()
-useWallet().connect('test')
+const { token } = useContracts()
+// useWallet().connect('test')
