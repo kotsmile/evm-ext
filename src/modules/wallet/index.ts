@@ -7,10 +7,9 @@ import { logger } from './utils'
 import type { Module } from '@/config/type'
 import { useModule } from '@/config/utils'
 import contractsModule from '@/modules/contracts'
+import type { ChainId } from '@/utils/chain'
 
-export const walletModule = <WC extends WalletsDefintion>(
-  walletConfig: WalletModuleConfig<WC>
-) => ({
+export const walletModule = <WC extends WalletModuleConfig>(walletConfig: WC) => ({
   wallet: {
     tools: (config) => ({
       useWallet: () => useWallet_config<WC>(config, walletConfig),
@@ -23,10 +22,9 @@ export const walletModule = <WC extends WalletsDefintion>(
 
         const wallet = useWalletState(config)
 
-        wallet.chainId = wallet.DEFAULT_CHAINID =
-          contracts.getContractsConfig().DEFAULT_CHAINID ?? '1'
-
-        wallet.chainIds = contracts.getContractsConfig().chainIds ?? []
+        wallet.chainId = wallet.DEFAULT_CHAINID = contracts.getContractsConfig()
+          .DEFAULT_CHAINID as ChainId
+        wallet.chainIds = contracts.getContractsConfig().chainIds as ChainId[]
       } catch (e) {
         logger.error(e)
         return false

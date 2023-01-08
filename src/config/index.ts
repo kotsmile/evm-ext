@@ -1,7 +1,7 @@
 import type { EvmConfig, Module } from '@/config/type'
 import { logger } from '@/config/utils'
 
-import { disableLogger, entries, keyOf } from '@/utils'
+import { disableLogger, keyOf } from '@/utils'
 import type { RT } from '@/utils/type'
 
 export const defineEvmConfig = <M extends Record<string, Module>>(
@@ -9,7 +9,6 @@ export const defineEvmConfig = <M extends Record<string, Module>>(
 ) => {
   if (config.DEBUG === false) disableLogger()
 
-  /// TODO: fix empty modules type problem
   const tools = {} as {
     [K in keyof M]: RT<M[K]['tools']>
   }
@@ -40,6 +39,7 @@ export const defineEvmConfig = <M extends Record<string, Module>>(
           .catch((e) => logger.error(`Cant init ${String(name)} module: ${e}`))
       }
 
+      /// TODO same code :((
       // defered modules
       for (const name of keyOf(config.modules)) {
         const module = config.modules[name]
@@ -54,5 +54,6 @@ export const defineEvmConfig = <M extends Record<string, Module>>(
     },
     config,
     ...tools,
+    ...config.adapter.tools,
   })
 }

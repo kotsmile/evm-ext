@@ -13,9 +13,12 @@ import { logger } from './utils'
 import type { WalletModuleConfig, WalletsDefintion } from './type'
 import { useWalletState } from './state'
 
-export const useWallet_config = <WC extends WalletsDefintion>(
+import { useModule } from '@/config/utils'
+import contractsModule from '@/modules/contracts'
+
+export const useWallet_config = <WC extends WalletModuleConfig>(
   config: EvmConfig,
-  walletConfig: WalletModuleConfig<WC>
+  walletConfig: WC
 ) => {
   return {
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {
@@ -41,11 +44,12 @@ export const useWallet_config = <WC extends WalletsDefintion>(
       const walletState = useWalletState(config)
       const whClass = unwrapState(walletState.walletHandler)
       if (whClass) whClass?.clear()
+      const contracts = useModule(config, contractsModule)
 
       const walletHandler = new wallets[walletType](
         config,
         walletConfig,
-        config.chainIds,
+        (contracts?.getContractsConfig().chainIds as ChainId[]) ?? [],
         walletState.chainId,
         this.updateStoreState,
         (wallet) => {

@@ -1,3 +1,4 @@
+import type { RemoveAbstract } from '@/utils/type'
 import type { WalletHandler } from './wallets/base'
 
 export type Options = {
@@ -9,12 +10,9 @@ export type Options = {
   globalLoading?: boolean
 }
 
-type RemoveAbstract<C extends abstract new (...args: any) => any> = new (
-  ...args: ConstructorParameters<C>
-) => InstanceType<C>
-
 export type WalletsDefintion = Record<string, RemoveAbstract<typeof WalletHandler>>
-export type WalletModuleConfig<W extends WalletsDefintion> = {
-  wallets: W
+
+export type WalletModuleConfig = {
+  wallets: WalletsDefintion
   options: Options
 }

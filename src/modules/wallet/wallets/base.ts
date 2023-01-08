@@ -36,7 +36,7 @@ export abstract class WalletHandler {
 
   constructor(
     public config: EvmConfig,
-    public walletConfig: WalletModuleConfig<any>,
+    public walletConfig: WalletModuleConfig,
     public chainIds: readonly ChainId[],
     public defaultChainId: ChainId,
     public updateStoreState: UpdateStoreStateFunction,
@@ -97,5 +97,20 @@ export abstract class WalletHandler {
   }
   async getAddress(): Promise<string | null> {
     return (await this.getSigner())?.getAddress() ?? null
+  }
+}
+
+export class MockWallet extends WalletHandler {
+  connect(): Promise<boolean> {
+    throw new Error('Method not implemented.')
+  }
+  disconnect(): Promise<boolean> {
+    throw new Error('Method not implemented.')
+  }
+  switchChain(chainId: ChainId): Promise<boolean> {
+    throw new Error('Method not implemented.')
+  }
+  addChain(chainId: ChainId): Promise<boolean> {
+    throw new Error('Method not implemented.')
   }
 }
