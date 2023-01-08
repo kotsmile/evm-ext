@@ -1,27 +1,28 @@
-import { entries } from '@/utils'
 import type { Module } from '@/config/type'
+import { entries } from '@/utils'
 
-import { useEvents_config } from '@/modules/events/use'
+import { useModule } from '@/config/utils'
+import { EventsModule } from '@/modules'
 
 import { storeLifecycles, StoreModuleConfig } from './type'
 import { logger, onLifecycle } from './utils'
 
-export const storeModule = (storeConfig: StoreModuleConfig) => ({
+export default (storeConfig: StoreModuleConfig) => ({
   store: {
     init: async (config) => {
       try {
         const { stores } = storeConfig
 
-        const useEvents = () => useEvents_config(config)
-        const eventsState = useEvents()
+        const events = useModule(config, EventsModule)
+        const eventsTools = events.useEvents()
 
         if (stores) {
           for (const [name, store] of entries(stores)) {
             logger.info(`Initiate "${name}" store`)
             for (const lifecycle of storeLifecycles) {
               if (lifecycle === 'init')
-                eventsState.addListenerOnce(lifecycle, store[onLifecycle(lifecycle)])
-              else eventsState.addListener(lifecycle, store[onLifecycle(lifecycle)])
+                eventsTools.addListenerOnce(lifecycle, store[onLifecycle(lifecycle)])
+              else eventsTools.addListener(lifecycle, store[onLifecycle(lifecycle)])
             }
           }
         }
@@ -37,5 +38,3 @@ export const storeModule = (storeConfig: StoreModuleConfig) => ({
 
 export * from './type'
 export * from './utils'
-
-export default storeModule

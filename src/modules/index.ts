@@ -1,3 +1,7 @@
-import type { Module } from '@/config/type'
+import ChainModule from './chain'
+import ContractsModule from './contracts'
+import EventsModule from './events'
+import StoreModule from './store'
+import WalletModule from './wallet'
 
-export {}
+export { ChainModule, ContractsModule, EventsModule, StoreModule, WalletModule }

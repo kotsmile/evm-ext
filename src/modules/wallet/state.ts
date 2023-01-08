@@ -27,11 +27,11 @@ export const state: StateFunction<WalletState> = (config) => {
   return {
     wallet: '',
     signer: wrapState(null),
-    chainId: (contracts?.getContractsConfig().DEFAULT_CHAINID as ChainId) ?? DEF_CHAINID,
+    chainId: (contracts.getContractsConfig().DEFAULT_CHAINID as ChainId) ?? DEF_CHAINID,
     realChainId: DEF_CHAINID,
-    chainIds: (contracts?.getContractsConfig().chainIds as ChainId[]) ?? [DEF_CHAINID],
+    chainIds: (contracts.getContractsConfig().chainIds as ChainId[]) ?? [DEF_CHAINID],
     DEFAULT_CHAINID:
-      (contracts?.getContractsConfig().DEFAULT_CHAINID as ChainId) ?? DEF_CHAINID,
+      (contracts.getContractsConfig().DEFAULT_CHAINID as ChainId) ?? DEF_CHAINID,
     login: false,
     loading: false,
     walletType: null,

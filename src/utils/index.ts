@@ -1,7 +1,9 @@
-export * as rpc from '@/utils/chain/rpc'
-export * as chain from '@/utils/chain'
-export type { INotNullSigner, ISigner } from './chain/type'
-export { safe, safeRead, safeWrite } from './safe'
+export * from './chain/rpc'
+export * from './chain'
+export * from './chain/type'
+export * from './safe'
+export * from './address'
+export * from './type'
 
 export const keyOf = <O extends Record<string | number | symbol, any>>(o: O) => {
   return Object.keys(o) as (keyof O)[]

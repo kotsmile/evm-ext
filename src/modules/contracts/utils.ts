@@ -3,9 +3,10 @@ import { ethers } from 'ethers'
 import { createLogger } from '@/utils'
 import type { EvmConfig } from '@/config/type'
 
-import type { ContractsConfig } from './type'
 import { useModule } from '@/config/utils'
-import chainModule from '@/modules/chain'
+import { ChainModule } from '@/modules'
+
+import type { ContractsConfig } from './type'
 
 export const contractType = <C>(): C => ({} as C)
 export const logger = createLogger('Contracts Module')
@@ -55,8 +56,7 @@ export const debugInfo = (config: EvmConfig, contractsConfig: ContractsConfig) =
     console.groupEnd()
   }
 
-  const chain = useModule(config, chainModule)
-  if (!chain) return
+  const chain = useModule(config, ChainModule)
 
   for (const chainId of contractsConfig.chainIds)
     console.log(chainId, chain.getRpc(chainId))

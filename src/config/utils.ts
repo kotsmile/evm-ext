@@ -17,12 +17,11 @@ export const useModule = <Name extends string, M extends Module>(
 ) => {
   const name = getModuleName(module)
 
-  if (!config.modules) return undefined
+  if (!config.modules) throw new Error(`Not found module "${name}"`)
 
   if (name in config.modules) {
     return config.modules[name].tools?.(config) as RT<M['tools']>
   } else {
-    logger.error(`Not found module "${name}"`)
-    return undefined
+    throw new Error(`Not found module "${name}"`)
   }
 }

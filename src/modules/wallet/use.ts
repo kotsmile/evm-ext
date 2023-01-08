@@ -1,20 +1,16 @@
 import type { Bytes } from 'ethers'
-
 import type { EvmConfig } from '@/config/type'
 
 import { safeRead, unwrapState, wrapState } from '@/utils'
-import type { ChainId } from '@/utils/chain'
-import type { Cast } from '@/utils/type'
+import type { ChainId, Cast } from '@/utils'
 
-import { useEvents } from '@/modules/events'
+import { useModule } from '@/config/utils'
+import { ContractsModule, EventsModule } from '@/modules'
 
 import type { UpdateParams } from './wallets/base'
 import { logger } from './utils'
-import type { WalletModuleConfig, WalletsDefintion } from './type'
+import type { WalletModuleConfig } from './type'
 import { useWalletState } from './state'
-
-import { useModule } from '@/config/utils'
-import contractsModule from '@/modules/contracts'
 
 export const useWallet_config = <WC extends WalletModuleConfig>(
   config: EvmConfig,
@@ -44,7 +40,9 @@ export const useWallet_config = <WC extends WalletModuleConfig>(
       const walletState = useWalletState(config)
       const whClass = unwrapState(walletState.walletHandler)
       if (whClass) whClass?.clear()
-      const contracts = useModule(config, contractsModule)
+
+      const contracts = useModule(config, ContractsModule)
+      const events = useModule(config, EventsModule)
 
       const walletHandler = new wallets[walletType](
         config,
@@ -53,11 +51,11 @@ export const useWallet_config = <WC extends WalletModuleConfig>(
         walletState.chainId,
         this.updateStoreState,
         (wallet) => {
-          useEvents(config).emit('onWalletChange', { wallet })
+          events.useEvents().emit('onWalletChange', { wallet })
           if (walletConfig.options?.updateOnWalletChange) this.loadAll({ login: true })
         },
         (chainId) => {
-          useEvents(config).emit('onChainChange', { chainId, natural: true })
+          events.useEvents().emit('onChainChange', { chainId, natural: true })
           if (walletConfig.options?.updateOnChainChange)
             this.loadAll({ init: true, login: true })
         }
@@ -71,12 +69,13 @@ export const useWallet_config = <WC extends WalletModuleConfig>(
       await this.loadAll({ init: true, login: true })
     },
     async loadAll({ init = true, login = true }: { init?: boolean; login?: boolean }) {
-      const { emit } = useEvents(config)
+      const events = useModule(config, EventsModule)
+      const eventsActions = events.useEvents()
 
-      if (init) await emit('init', {})
-      if (login) await emit('login', {})
+      if (init) await eventsActions.emit('init', {})
+      if (login) await eventsActions.emit('login', {})
 
-      await emit('final', {})
+      await eventsActions.emit('final', {})
     },
     async signMessage(data: string | Bytes): Promise<string | null> {
       const walletState = useWalletState(config)
@@ -91,27 +90,32 @@ export const useWallet_config = <WC extends WalletModuleConfig>(
       return null
     },
     async switchChain(chainId: ChainId): Promise<boolean> {
-      const { emit } = useEvents(config)
+      const events = useModule(config, EventsModule)
+      const eventsActions = events.useEvents()
+
       const walletState = useWalletState(config)
 
       const result = Boolean(
         await unwrapState(walletState.walletHandler)?.switchChain(chainId)
       )
-      if (result) emit('onChainChange', { chainId, natural: false })
+      if (result) eventsActions.emit('onChainChange', { chainId, natural: false })
       return result
     },
     async disconnect(): Promise<boolean> {
-      const { _emit } = useEvents(config)
+      const events = useModule(config, EventsModule)
+      const eventsActions = events.useEvents()
+
+      // const { _emit } = useEvents(config)
       const walletState = useWalletState(config)
 
-      await _emit('beforeLogout', {})
+      await eventsActions._emit('beforeLogout', {})
       walletState.login = false
       walletState.wallet = ''
-      await _emit('logout', {})
+      await eventsActions._emit('logout', {})
 
       // setPreservedConnection(this.walletType, false)
 
-      await _emit('afterLogout', {})
+      await eventsActions._emit('afterLogout', {})
       return Boolean(await unwrapState(walletState.walletHandler)?.disconnect())
     },
   }

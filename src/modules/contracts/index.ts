@@ -9,7 +9,7 @@ import type {
 import { debugInfo, logger } from './utils'
 import { useContractsOnChain_config, useContracts_config } from './use'
 
-export const contractsModule = <
+export default <
   ContractsJSON extends ContractsJSONStruct,
   ChainIds extends AppChainIds<ContractsJSON>,
   DefaultChainId extends ChainIds[number],
@@ -36,8 +36,6 @@ export const contractsModule = <
     },
   } satisfies Module,
 })
-
-export default contractsModule
 
 export * from './type'
 export * from './utils'

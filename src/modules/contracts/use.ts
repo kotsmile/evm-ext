@@ -2,10 +2,11 @@ import { Contract } from 'ethers'
 import type { BaseContract } from 'ethers'
 
 import type { EvmConfig } from '@/config/type'
+import type { ChainId, Cast, INotNullSigner } from '@/utils'
 
-import type { INotNullSigner } from '@/utils/chain/type'
-import type { ChainId } from '@/utils/chain'
-import type { Cast } from '@/utils/type'
+import { useModule } from '@/config/utils'
+import { ChainModule } from '@/modules'
+
 import { keyOf } from '@/utils'
 
 import type {
@@ -16,9 +17,7 @@ import type {
   ContractsConfig,
 } from './type'
 
-import chainModule from '@/modules/chain'
 import { logger } from './utils'
-import { useModule } from '@/config/utils'
 
 export type DefaultContract<T, D> = T extends undefined ? D : T
 
@@ -53,7 +52,7 @@ export const genContractObjects = (
     const { name, withAddress } = contracts[contractName]
     const { abi, address } = allContracts[name.toString()]
 
-    const chain = useModule(config, chainModule)
+    const chain = useModule(config, ChainModule)
     if (!chain) return obj
 
     const cFunc = (address: string, chainId: ChainId) =>

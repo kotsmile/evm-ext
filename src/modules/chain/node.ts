@@ -10,7 +10,7 @@ export const getRpc_config = (_: EvmConfig, chainConfig: ChainModuleConfig) => {
   const rpcFunction = chainConfig
   if (!rpcFunction) {
     logger.warn('No rpc function in config')
-    return () => '__NO_RCP__'
+    return () => '__NO_RPC__'
   }
   return (chainId: ChainId) => rpcFunction(getChainTag(chainId)) ?? '__NO_RPC__'
 }
