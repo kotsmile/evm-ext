@@ -6,10 +6,13 @@ import type {
   ContractsJSONStruct,
 } from '@/modules/contracts'
 
-export type EvmConfig<Modules extends Record<string, Module> = Record<string, Module>> = {
+export type EvmConfig<
+  Modules extends Record<string, Module> = Record<string, Module>,
+  Adapter extends AdapterDefinition = AdapterDefinition
+> = {
   DEBUG?: boolean
 
-  readonly adapter: AdapterDefinition
+  readonly adapter: Adapter
   readonly modules?: Modules
 }
 

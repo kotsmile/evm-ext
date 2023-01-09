@@ -1,11 +1,15 @@
+import type { AdapterDefinition } from '@/adapter'
 import type { EvmConfig, Module } from '@/config/type'
 import { logger } from '@/config/utils'
 
 import { disableLogger, keyOf } from '@/utils'
 import type { RT } from '@/utils/type'
 
-export const defineEvmConfig = <M extends Record<string, Module>>(
-  config: EvmConfig<M>
+export const defineEvmConfig = <
+  M extends Record<string, Module>,
+  A extends AdapterDefinition
+>(
+  config: EvmConfig<M, A>
 ) => {
   if (config.DEBUG === false) disableLogger()
 
@@ -57,6 +61,8 @@ export const defineEvmConfig = <M extends Record<string, Module>>(
     },
     config,
     ...tools,
-    ...config.adapter.tools,
+    tools: config.adapter.tools?.(config) as A['tools'] extends undefined
+      ? never
+      : RT<A['tools']>,
   })
 }

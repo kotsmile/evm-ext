@@ -1,4 +1,4 @@
-import ChainModule from './chain'
+import ChainModule, { type ChainModuleConfig } from './chain'
 import ContractsModule, {
   type AppChainIds,
   type ContractsConfig,
@@ -6,7 +6,7 @@ import ContractsModule, {
   type ContractsJSONStruct,
 } from './contracts'
 import EventsModule from './events'
-import StoreModule from './store'
+import StoreModule, { type StoreModuleConfig } from './store'
 import WalletModule, { type WalletModuleConfig } from './wallet'
 
 export const defaultModules = <
@@ -14,13 +14,11 @@ export const defaultModules = <
   ChainIds extends AppChainIds<ContractsJSON>,
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>,
-  ChainConfig extends Parameters<typeof ChainModule>[0],
-  WalletConfig extends WalletModuleConfig,
-  StoreConfig extends Parameters<typeof StoreModule>[0]
+  WalletConfig extends WalletModuleConfig
 >(config: {
-  chain: ChainConfig
+  chain: ChainModuleConfig
   contracts: ContractsConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts>
-  store: StoreConfig
+  store: StoreModuleConfig
   wallet: WalletConfig
 }) =>
   ({

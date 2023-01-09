@@ -1,16 +1,16 @@
 import type { AdapterDefinition } from '@/adapter'
 import { defineEvmConfig } from '@/config'
 import { mockAdapter, mockState } from '@/mocks'
-import eventsModule from '@/modules/events'
-import storeModule from '@/modules/store'
+
+import { EventsModule, StoreModule } from '@/modules'
 
 describe('Events Module', () => {
   it('should trigger "init" event on init()', function (done) {
     const useTestEvm = defineEvmConfig({
       DEBUG: false,
       modules: {
-        ...eventsModule(),
-        ...storeModule({
+        // ...EventsModule(),
+        ...StoreModule({
           stores: {
             testStore: {
               async onInit() {
