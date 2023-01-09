@@ -1,6 +1,6 @@
 import type { AdapterDefinition } from '@/adapter'
 
-export type EvmConfig<
+export type EvmContext<
   Modules extends Record<string, Module> = Record<string, Module>,
   Adapter extends AdapterDefinition = AdapterDefinition
 > = {
@@ -9,10 +9,10 @@ export type EvmConfig<
   readonly modules?: Modules
 }
 
-export type InitFunction = (config: EvmConfig) => Promise<boolean>
-export type ToolsFunction = (config: EvmConfig) => Record<string, any>
+export type InitFunction = (ctx: EvmContext) => Promise<boolean>
+export type ToolsFunction = (ctx: EvmContext) => Record<string, any>
 
-export type StateFunction<S extends Record<string, any> = any> = (config: EvmConfig) => S
+export type StateFunction<S extends Record<string, any> = any> = (ctx: EvmContext) => S
 
 export type Module = {
   tools?: ToolsFunction

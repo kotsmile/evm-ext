@@ -1,4 +1,4 @@
-import type { EvmConfig, StateFunction } from '@/config/type'
+import type { EvmContext, StateFunction } from '@/core/type'
 
 import type { CallbackFunction, EventType, Filter } from './type'
 
@@ -20,5 +20,5 @@ export const state: StateFunction<EventsState> = () => {
   }
 }
 
-export const useEventsState = (config: EvmConfig) =>
-  config.adapter.state.createState('$events', state)(config)
+export const useEventsState = (ctx: EvmContext) =>
+  ctx.adapter.state.createState('$events', state)(ctx)

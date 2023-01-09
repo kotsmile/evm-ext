@@ -1,9 +1,9 @@
 import type { Bytes } from 'ethers'
-import type { EvmConfig } from '@/config/type'
+import type { EvmContext } from '@/core/type'
 
 import { safeRead, unwrapState, wrapState, type ChainId, type Cast } from '@/utils'
 
-import { useModule } from '@/config/utils'
+import { useModule } from '@/core/utils'
 import { Contracts, Events } from '@/modules'
 
 import { logger } from './utils'
@@ -12,15 +12,12 @@ import { useWalletState } from './state'
 import type { UpdateParams } from './wallets/base'
 import type { WalletParams } from './type'
 
-export const useWallet_config = <WP extends WalletParams>(
-  config: EvmConfig,
-  params: WP
-) => {
+export const useWallet_ctx = <WP extends WalletParams>(ctx: EvmContext, params: WP) => {
   return {
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {
       if (!wallet || !chainId) return
 
-      const walletState = useWalletState(config)
+      const walletState = useWalletState(ctx)
 
       walletState.signer = wrapState(signer)
       walletState.wallet = wallet
@@ -37,15 +34,15 @@ export const useWallet_config = <WP extends WalletParams>(
 
       logger.info(`Connect to "${walletType}"`)
 
-      const walletState = useWalletState(config)
+      const walletState = useWalletState(ctx)
       const whClass = unwrapState(walletState.walletHandler)
       if (whClass) whClass?.clear()
 
-      const contracts = useModule(config, Contracts)
-      const events = useModule(config, Events)
+      const contracts = useModule(ctx, Contracts)
+      const events = useModule(ctx, Events)
 
       const walletHandler = new wallets[walletType](
-        config,
+        ctx,
         params,
         (contracts?.getContractsParams().chainIds as ChainId[]) ?? [],
         walletState.chainId,
@@ -69,7 +66,7 @@ export const useWallet_config = <WP extends WalletParams>(
       await this.loadAll({ init: true, login: true })
     },
     async loadAll({ init = true, login = true }: { init?: boolean; login?: boolean }) {
-      const events = useModule(config, Events)
+      const events = useModule(ctx, Events)
       const eventsActions = events.useEvents()
 
       if (init) await eventsActions.emit('init', {})
@@ -78,7 +75,7 @@ export const useWallet_config = <WP extends WalletParams>(
       await eventsActions.emit('final', {})
     },
     async signMessage(data: string | Bytes): Promise<string | null> {
-      const walletState = useWalletState(config)
+      const walletState = useWalletState(ctx)
 
       if (walletState.login) {
         const signedMessage = await safeRead<string | null>(
@@ -90,10 +87,10 @@ export const useWallet_config = <WP extends WalletParams>(
       return null
     },
     async switchChain(chainId: ChainId): Promise<boolean> {
-      const events = useModule(config, Events)
+      const events = useModule(ctx, Events)
       const eventsActions = events.useEvents()
 
-      const walletState = useWalletState(config)
+      const walletState = useWalletState(ctx)
 
       const result = Boolean(
         await unwrapState(walletState.walletHandler)?.switchChain(chainId)
@@ -102,11 +99,11 @@ export const useWallet_config = <WP extends WalletParams>(
       return result
     },
     async disconnect(): Promise<boolean> {
-      const events = useModule(config, Events)
+      const events = useModule(ctx, Events)
       const eventsActions = events.useEvents()
 
-      // const { _emit } = useEvents(config)
-      const walletState = useWalletState(config)
+      // const { _emit } = useEvents(ctx)
+      const walletState = useWalletState(ctx)
 
       await eventsActions._emit('beforeLogout', {})
       walletState.login = false

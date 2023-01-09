@@ -1,9 +1,9 @@
 import { wrapState, type ISigner, type WrapState } from '@/utils'
 import type { ChainId } from '@/utils/chain'
-import type { EvmConfig, StateFunction } from '@/config/type'
+import type { EvmContext, StateFunction } from '@/core/type'
 
 import type { WalletHandler } from './wallets/base'
-import { useModule } from '@/config/utils'
+import { useModule } from '@/core/utils'
 import { Contracts } from '@/modules'
 
 export type WalletState = {
@@ -21,8 +21,8 @@ export type WalletState = {
 
 const DEF_CHAINID: ChainId = '1'
 
-export const state: StateFunction<WalletState> = (config) => {
-  const contracts = useModule(config, Contracts)
+export const state: StateFunction<WalletState> = (ctx) => {
+  const contracts = useModule(ctx, Contracts)
 
   return {
     wallet: '',
@@ -39,5 +39,5 @@ export const state: StateFunction<WalletState> = (config) => {
   }
 }
 
-export const useWalletState = (config: EvmConfig) =>
-  config.adapter.state.createState('$wallet', state)(config)
+export const useWalletState = (ctx: EvmContext) =>
+  ctx.adapter.state.createState('$wallet', state)(ctx)

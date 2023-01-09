@@ -1,6 +1,6 @@
 import { createLogger, keyOf } from '@/utils'
 import type { RT } from '@/utils/type'
-import type { EvmConfig, Module } from './type'
+import type { EvmContext, Module } from './type'
 
 export const logger = createLogger('Config')
 
@@ -12,15 +12,15 @@ export const getModuleName = <Name extends string, M extends Module>(
 }
 
 export const useModule = <Name extends string, M extends Module>(
-  config: EvmConfig,
+  ctx: EvmContext,
   module: (...args: any[]) => Record<Name, M>
 ) => {
   const name = getModuleName(module)
 
-  if (!config.modules) throw new Error(`Not found module "${name}"`)
+  if (!ctx.modules) throw new Error(`Not found module "${name}"`)
 
-  if (name in config.modules) {
-    return config.modules[name].tools?.(config) as RT<M['tools']>
+  if (name in ctx.modules) {
+    return ctx.modules[name].tools?.(ctx) as RT<M['tools']>
   } else {
     throw new Error(`Not found module "${name}"`)
   }

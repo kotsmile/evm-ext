@@ -1,6 +1,6 @@
 import { providers } from 'ethers'
 
-import type { EvmConfig } from '@/config/type'
+import type { EvmContext } from '@/core/type'
 
 import type { ISigner } from '@/utils'
 import type { ChainId } from '@/utils/chain'
@@ -35,7 +35,7 @@ export abstract class WalletHandler {
   public actual = true
 
   constructor(
-    public config: EvmConfig,
+    public ctx: EvmContext,
     public walletConfig: WalletParams,
     public chainIds: readonly ChainId[],
     public defaultChainId: ChainId,

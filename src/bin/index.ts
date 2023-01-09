@@ -10,7 +10,7 @@ program
 
 program
   .command('init')
-  .option('-p, --path <config-path>', 'initiate config file', './src/evm.config.ts')
+  .option('-p, --path <config-path>', 'initiate config file', './src/evm.ctx.ts')
   .action(initCommand)
 
 program.parse()

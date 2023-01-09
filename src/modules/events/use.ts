@@ -1,10 +1,10 @@
-import type { EvmConfig } from '@/config/type'
+import type { EvmContext } from '@/core/type'
 
 import type { Events, EventType, Filter, RawEventType } from './type'
 import { emitMsg, toAfterEvent, toBeforeEvent } from './utils'
 import { useEventsState } from './state'
 
-export const useEvents_config = (config: EvmConfig) => {
+export const useEvents_ctx = (ctx: EvmContext) => {
   return {
     addListener<Event extends EventType>(
       event: Event,
@@ -26,7 +26,7 @@ export const useEvents_config = (config: EvmConfig) => {
       await this._emit(toAfterEvent(event), args)
     },
     removeListener(listenerId: number) {
-      const eventsState = useEventsState(config)
+      const eventsState = useEventsState(ctx)
       eventsState.listeners =
         eventsState.listeners?.filter((l) => l.id !== listenerId) ?? []
     },
@@ -36,7 +36,7 @@ export const useEvents_config = (config: EvmConfig) => {
       filters: Filter<Event>[] = [],
       once = false
     ): number {
-      const eventsState = useEventsState(config)
+      const eventsState = useEventsState(ctx)
 
       const listenerId = eventsState.listenerId++
       eventsState.listeners.push({
@@ -49,7 +49,7 @@ export const useEvents_config = (config: EvmConfig) => {
       return listenerId
     },
     async _emit<Event extends EventType>(event: Event, args: Events[Event]['args']) {
-      const eventsState = useEventsState(config)
+      const eventsState = useEventsState(ctx)
 
       const removeIds: number[] = []
       const listeners = eventsState.listeners

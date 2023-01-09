@@ -1,4 +1,4 @@
-import type { Module } from '@/config/type'
+import type { Module } from '@/core/type'
 
 import type {
   ContractsJSONStruct,
@@ -7,7 +7,7 @@ import type {
   ContractsParams,
 } from './type'
 import { debugInfo, logger } from './utils'
-import { useContractsOnChain_config, useContracts_config } from './use'
+import { useContractsOnChain_ctx, useContracts_ctx } from './use'
 
 export const Contracts = <
   ContractsJSON extends ContractsJSONStruct,
@@ -18,15 +18,15 @@ export const Contracts = <
   params: ContractsParams<ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => ({
   contracts: {
-    tools: (config) => ({
-      useContracts: useContracts_config(config, params),
-      useContractsOnChain: useContractsOnChain_config(config, params),
+    tools: (ctx) => ({
+      useContracts: useContracts_ctx(ctx, params),
+      useContractsOnChain: useContractsOnChain_ctx(ctx, params),
       getContractsParams: () => params,
     }),
-    init: async (config) => {
+    init: async (ctx) => {
       try {
         logger.info('List of contracts')
-        debugInfo(config, params)
+        debugInfo(ctx, params)
       } catch (e) {
         logger.error(e)
         return false

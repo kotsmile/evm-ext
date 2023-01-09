@@ -1,13 +1,13 @@
-import type { Module } from '@/config/type'
+import type { Module } from '@/core/type'
 
 import type { ChainParams } from './type'
-import { getRpc_config, getProvider_config } from './node'
+import { getRpc_ctx, getProvider_ctx } from './node'
 
 export const Chain = (params: ChainParams) => ({
   chain: {
-    tools: (config) => ({
-      getRpc: getRpc_config(config, params),
-      getProvider: getProvider_config(config, params),
+    tools: (ctx) => ({
+      getRpc: getRpc_ctx(ctx, params),
+      getProvider: getProvider_ctx(ctx, params),
       getChainParams: () => params,
     }),
   } satisfies Module,

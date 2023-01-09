@@ -1,5 +1,4 @@
-import { defineEvmConfig } from '@/config'
-export { defineEvmConfig }
+export * from '@/core'
 
 export * as modules from '@/modules'
 export * as mocks from '@/mocks'

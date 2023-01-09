@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 
-import { defineEvmConfig } from '@/config'
+import { defineEvm } from '@/core'
 import { mockState, mockAdapter } from '@/mocks'
 import { Wallet, Contracts } from '@/modules'
 
-const useTestEvm = defineEvmConfig({
+const useTestEvm = defineEvm({
   modules: {
     ...Wallet({
       wallets: {},

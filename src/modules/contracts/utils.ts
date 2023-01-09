@@ -1,9 +1,9 @@
 import { ethers } from 'ethers'
 
 import { createLogger } from '@/utils'
-import type { EvmConfig } from '@/config/type'
+import type { EvmContext } from '@/core/type'
 
-import { useModule } from '@/config/utils'
+import { useModule } from '@/core/utils'
 import { Chain } from '@/modules'
 
 import type { ContractsParams } from './type'
@@ -11,7 +11,7 @@ import type { ContractsParams } from './type'
 export const contractType = <C>(): C => ({} as C)
 export const logger = createLogger('Contracts Module')
 
-export const getContracts = (config: EvmConfig, contractsConfig: ContractsParams) => {
+export const getContracts = (ctx: EvmContext, contractsConfig: ContractsParams) => {
   const contracts = contractsConfig.contractsJSON
   if (!contracts) return
 
@@ -38,8 +38,8 @@ export const getContracts = (config: EvmConfig, contractsConfig: ContractsParams
   }
 }
 
-export const debugInfo = (config: EvmConfig, contractsConfig: ContractsParams) => {
-  const contractsAll = getContracts(config, contractsConfig)
+export const debugInfo = (ctx: EvmContext, contractsConfig: ContractsParams) => {
+  const contractsAll = getContracts(ctx, contractsConfig)
   if (!contractsAll) return
 
   for (const chainName of Object.keys(contractsAll)) {
@@ -56,7 +56,7 @@ export const debugInfo = (config: EvmConfig, contractsConfig: ContractsParams) =
     console.groupEnd()
   }
 
-  const chain = useModule(config, Chain)
+  const chain = useModule(ctx, Chain)
 
   for (const chainId of contractsConfig.chainIds)
     console.log(chainId, chain.getRpc(chainId))

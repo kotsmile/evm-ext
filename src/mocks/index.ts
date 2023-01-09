@@ -2,23 +2,23 @@ import type { BaseContract } from 'ethers'
 
 import type { adapter } from '@/index'
 import type { ContractsJSONStruct } from '@/modules/contracts'
-import type { EvmConfig, ToolsFunction } from '@/config/type'
+import type { EvmContext, ToolsFunction } from '@/core/type'
 
 export const mockState = {} as any
 
 export const mockCreateState = <State>(
   name: string,
-  state: (config: EvmConfig) => State
+  state: (ctx: EvmContext) => State
 ) => {
-  return (config: EvmConfig) => {
+  return (ctx: EvmContext) => {
     if (name in mockState) return mockState[name]
-    return (mockState[name] = state(config))
+    return (mockState[name] = state(ctx))
   }
 }
 
-export const mockTools = ((config) => ({
+export const mockTools = ((ctx) => ({
   helloTool: () => console.log('hello world'),
-  printConfig: () => console.log(config),
+  printConfig: () => console.log(ctx),
 })) satisfies ToolsFunction
 
 export const mockAdapter = {

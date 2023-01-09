@@ -1,13 +1,13 @@
 import { mockAdapter, MockContract, mockContractsJSON } from '@/mocks'
 
-import { defineEvmConfig } from '@/config'
+import { defineEvm } from '@/core'
 import { defaultModules } from '@/modules'
 
 import { ankrRpc, typeOf } from '@/utils'
 
 import { MockWallet } from '@/modules/wallet'
 
-const useEvm = defineEvmConfig({
+const useEvm = defineEvm({
   DEBUG: true,
   modules: {
     ...defaultModules({
@@ -41,7 +41,7 @@ const useEvm = defineEvmConfig({
   adapter: mockAdapter,
 })
 
-const { chain: c, events: e, contracts: con, config, wallet: w } = useEvm()
+const { chain: c, events: e, contracts: con, ctx, wallet: w } = useEvm()
 const { useEvents, useEventsState } = e
 const { getProvider, getRpc } = c
 const { useWallet } = w

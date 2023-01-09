@@ -2,28 +2,28 @@ import type { WalletParams } from './type'
 
 import type { ChainId } from '@/utils/chain'
 
-import { useWallet_config } from './use'
+import { useWallet_ctx } from './use'
 import { useWalletState } from './state'
 import { logger } from './utils'
 
-import type { Module } from '@/config/type'
+import type { Module } from '@/core/type'
 
-import { useModule } from '@/config/utils'
+import { useModule } from '@/core/utils'
 import { Contracts } from '@/modules'
 
 export const Wallet = <WP extends WalletParams>(params: WP) => ({
   wallet: {
-    tools: (config) => ({
-      useWallet: () => useWallet_config<WP>(config, params),
-      useWalletState: () => useWalletState(config),
+    tools: (ctx) => ({
+      useWallet: () => useWallet_ctx<WP>(ctx, params),
+      useWalletState: () => useWalletState(ctx),
       getWalletConfig: () => params,
     }),
-    init: async (config) => {
+    init: async (ctx) => {
       try {
-        const contracts = useModule(config, Contracts)
+        const contracts = useModule(ctx, Contracts)
         if (!contracts) return false
 
-        const wallet = useWalletState(config)
+        const wallet = useWalletState(ctx)
 
         wallet.chainId = wallet.DEFAULT_CHAINID = contracts.getContractsParams()
           .DEFAULT_CHAINID as ChainId

@@ -1,10 +1,10 @@
 import { Contract } from 'ethers'
 import type { BaseContract } from 'ethers'
 
-import type { EvmConfig } from '@/config/type'
+import type { EvmContext } from '@/core/type'
 import type { ChainId, Cast, INotNullSigner } from '@/utils'
 
-import { useModule } from '@/config/utils'
+import { useModule } from '@/core/utils'
 import { Chain } from '@/modules'
 
 import { keyOf } from '@/utils'
@@ -34,7 +34,7 @@ export type UseContracts<
 }
 
 export const genContractObjects = (
-  config: EvmConfig,
+  ctx: EvmContext,
   chainId: ChainId,
   contracts: Record<string, ContractDefinition<any, any>>,
   allContracts: Record<
@@ -52,7 +52,7 @@ export const genContractObjects = (
     const { name, withAddress } = contracts[contractName]
     const { abi, address } = allContracts[name.toString()]
 
-    const chain = useModule(config, Chain)
+    const chain = useModule(ctx, Chain)
     if (!chain) return obj
 
     const cFunc = (address: string, chainId: ChainId) =>
@@ -62,13 +62,13 @@ export const genContractObjects = (
   return obj
 }
 
-export const useContracts_config = <
+export const useContracts_ctx = <
   ContractsJSON extends ContractsJSONStruct,
   ChainIds extends AppChainIds<ContractsJSON>,
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
-  config: EvmConfig,
+  ctx: EvmContext,
   params: ContractsParams<ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   return (signer?: INotNullSigner) => {
@@ -88,7 +88,7 @@ export const useContracts_config = <
     const allContracts = contractsJSON[chainId][0].contracts ?? {}
 
     return genContractObjects(
-      config,
+      ctx,
       chainId as ChainId,
       params.contracts?.shared ?? {},
       allContracts,
@@ -97,13 +97,13 @@ export const useContracts_config = <
   }
 }
 
-export const useContractsOnChain_config = <
+export const useContractsOnChain_ctx = <
   ContractsJSON extends ContractsJSONStruct,
   ChainIds extends AppChainIds<ContractsJSON>,
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
-  config: EvmConfig,
+  ctx: EvmContext,
   params: ContractsParams<ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   return <CurrentChainId extends ChainIds[number]>(
@@ -125,7 +125,7 @@ export const useContractsOnChain_config = <
     const allContracts = contractsJSON[chainId][0].contracts
 
     return genContractObjects(
-      config,
+      ctx,
       chainId as ChainId,
       params.contracts?.on[chainId] ??
         ({} as Record<string, ContractDefinition<any, any>>),

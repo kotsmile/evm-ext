@@ -1,18 +1,18 @@
-import type { Module } from '@/config/type'
+import type { Module } from '@/core/type'
 
 import { useEventsState } from './state'
-import { useEvents_config } from './use'
+import { useEvents_ctx } from './use'
 import { logger } from './utils'
 
 export const Events = () => ({
   events: {
-    tools: (config) => ({
-      useEvents: () => useEvents_config(config),
-      useEventsState: () => useEventsState(config),
+    tools: (ctx) => ({
+      useEvents: () => useEvents_ctx(ctx),
+      useEventsState: () => useEventsState(ctx),
     }),
-    init: async (config) => {
+    init: async (ctx) => {
       try {
-        const events = useEvents_config(config)
+        const events = useEvents_ctx(ctx)
         await events.emit('init', {})
       } catch (e) {
         logger.error(e)
