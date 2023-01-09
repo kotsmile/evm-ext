@@ -5,7 +5,7 @@ import type { EvmConfig } from '@/config/type'
 import type { ChainId, Cast, INotNullSigner } from '@/utils'
 
 import { useModule } from '@/config/utils'
-import { ChainModule } from '@/modules'
+import { Chain } from '@/modules'
 
 import { keyOf } from '@/utils'
 
@@ -52,7 +52,7 @@ export const genContractObjects = (
     const { name, withAddress } = contracts[contractName]
     const { abi, address } = allContracts[name.toString()]
 
-    const chain = useModule(config, ChainModule)
+    const chain = useModule(config, Chain)
     if (!chain) return obj
 
     const cFunc = (address: string, chainId: ChainId) =>

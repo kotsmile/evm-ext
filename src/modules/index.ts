@@ -1,14 +1,14 @@
-import { ChainModule, type ChainParams } from './chain'
+import { Chain, type ChainParams } from './chain'
 import {
-  ContractsModule,
+  Contracts,
   type AppChainIds,
   type ContractsParams,
   type ContractsDefinition,
   type ContractsJSONStruct,
 } from './contracts'
-import { EventsModule } from './events'
-import { StoreModule, type StoreParams } from './store'
-import { WalletModule, type WalletParams } from './wallet'
+import { Events } from './events'
+import { Store, type StoreParams } from './store'
+import { Wallet, type WalletParams } from './wallet'
 
 export const defaultModules = <
   ContractsJSON extends ContractsJSONStruct,
@@ -23,11 +23,11 @@ export const defaultModules = <
   wallet: WP
 }) =>
   ({
-    ...EventsModule(),
-    ...ChainModule(config.chain),
-    ...ContractsModule(config.contracts),
-    ...WalletModule(config.wallet),
-    ...StoreModule(config.store),
+    ...Events(),
+    ...Chain(config.chain),
+    ...Contracts(config.contracts),
+    ...Wallet(config.wallet),
+    ...Store(config.store),
   } as const)
 
-export { ChainModule, ContractsModule, EventsModule, StoreModule, WalletModule }
+export { Chain, Contracts, Events, Store, Wallet }

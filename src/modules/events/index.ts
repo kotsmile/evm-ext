@@ -4,7 +4,7 @@ import { useEventsState } from './state'
 import { useEvents_config } from './use'
 import { logger } from './utils'
 
-export const EventsModule = () => ({
+export const Events = () => ({
   events: {
     tools: (config) => ({
       useEvents: () => useEvents_config(config),

@@ -3,7 +3,7 @@ import type { Module } from '@/config/type'
 import type { ChainParams } from './type'
 import { getRpc_config, getProvider_config } from './node'
 
-export const ChainModule = (params: ChainParams) => ({
+export const Chain = (params: ChainParams) => ({
   chain: {
     tools: (config) => ({
       getRpc: getRpc_config(config, params),

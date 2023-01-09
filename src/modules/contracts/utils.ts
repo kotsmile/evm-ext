@@ -4,7 +4,7 @@ import { createLogger } from '@/utils'
 import type { EvmConfig } from '@/config/type'
 
 import { useModule } from '@/config/utils'
-import { ChainModule } from '@/modules'
+import { Chain } from '@/modules'
 
 import type { ContractsParams } from './type'
 
@@ -56,7 +56,7 @@ export const debugInfo = (config: EvmConfig, contractsConfig: ContractsParams) =
     console.groupEnd()
   }
 
-  const chain = useModule(config, ChainModule)
+  const chain = useModule(config, Chain)
 
   for (const chainId of contractsConfig.chainIds)
     console.log(chainId, chain.getRpc(chainId))

@@ -2,15 +2,15 @@ import { expect } from 'chai'
 
 import { defineEvmConfig } from '@/config'
 import { mockState, mockAdapter } from '@/mocks'
-import { WalletModule, ContractsModule } from '@/modules'
+import { Wallet, Contracts } from '@/modules'
 
 const useTestEvm = defineEvmConfig({
   modules: {
-    ...WalletModule({
+    ...Wallet({
       wallets: {},
       options: {},
     }),
-    ...ContractsModule({}),
+    ...Contracts({}),
   },
   adapter: mockAdapter,
   DEBUG: false,

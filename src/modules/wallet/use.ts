@@ -4,7 +4,7 @@ import type { EvmConfig } from '@/config/type'
 import { safeRead, unwrapState, wrapState, type ChainId, type Cast } from '@/utils'
 
 import { useModule } from '@/config/utils'
-import { ContractsModule, EventsModule } from '@/modules'
+import { Contracts, Events } from '@/modules'
 
 import { logger } from './utils'
 import { useWalletState } from './state'
@@ -41,8 +41,8 @@ export const useWallet_config = <WP extends WalletParams>(
       const whClass = unwrapState(walletState.walletHandler)
       if (whClass) whClass?.clear()
 
-      const contracts = useModule(config, ContractsModule)
-      const events = useModule(config, EventsModule)
+      const contracts = useModule(config, Contracts)
+      const events = useModule(config, Events)
 
       const walletHandler = new wallets[walletType](
         config,
@@ -69,7 +69,7 @@ export const useWallet_config = <WP extends WalletParams>(
       await this.loadAll({ init: true, login: true })
     },
     async loadAll({ init = true, login = true }: { init?: boolean; login?: boolean }) {
-      const events = useModule(config, EventsModule)
+      const events = useModule(config, Events)
       const eventsActions = events.useEvents()
 
       if (init) await eventsActions.emit('init', {})
@@ -90,7 +90,7 @@ export const useWallet_config = <WP extends WalletParams>(
       return null
     },
     async switchChain(chainId: ChainId): Promise<boolean> {
-      const events = useModule(config, EventsModule)
+      const events = useModule(config, Events)
       const eventsActions = events.useEvents()
 
       const walletState = useWalletState(config)
@@ -102,7 +102,7 @@ export const useWallet_config = <WP extends WalletParams>(
       return result
     },
     async disconnect(): Promise<boolean> {
-      const events = useModule(config, EventsModule)
+      const events = useModule(config, Events)
       const eventsActions = events.useEvents()
 
       // const { _emit } = useEvents(config)

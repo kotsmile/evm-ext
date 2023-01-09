@@ -9,9 +9,9 @@ import { logger } from './utils'
 import type { Module } from '@/config/type'
 
 import { useModule } from '@/config/utils'
-import { ContractsModule } from '@/modules'
+import { Contracts } from '@/modules'
 
-export const WalletModule = <WP extends WalletParams>(params: WP) => ({
+export const Wallet = <WP extends WalletParams>(params: WP) => ({
   wallet: {
     tools: (config) => ({
       useWallet: () => useWallet_config<WP>(config, params),
@@ -20,7 +20,7 @@ export const WalletModule = <WP extends WalletParams>(params: WP) => ({
     }),
     init: async (config) => {
       try {
-        const contracts = useModule(config, ContractsModule)
+        const contracts = useModule(config, Contracts)
         if (!contracts) return false
 
         const wallet = useWalletState(config)

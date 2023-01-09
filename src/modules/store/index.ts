@@ -2,18 +2,18 @@ import type { Module } from '@/config/type'
 import { entries } from '@/utils'
 
 import { useModule } from '@/config/utils'
-import { EventsModule } from '@/modules'
+import { Events } from '@/modules'
 
 import { storeLifecycles, StoreParams } from './type'
 import { logger, onLifecycle } from './utils'
 
-export const StoreModule = (params: StoreParams) => ({
+export const Store = (params: StoreParams) => ({
   store: {
     init: async (config) => {
       try {
         const { stores } = params
 
-        const events = useModule(config, EventsModule)
+        const events = useModule(config, Events)
         const eventsTools = events.useEvents()
 
         if (stores) {

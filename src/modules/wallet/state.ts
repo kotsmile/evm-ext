@@ -4,7 +4,7 @@ import type { EvmConfig, StateFunction } from '@/config/type'
 
 import type { WalletHandler } from './wallets/base'
 import { useModule } from '@/config/utils'
-import { ContractsModule } from '@/modules'
+import { Contracts } from '@/modules'
 
 export type WalletState = {
   wallet: string
@@ -22,7 +22,7 @@ export type WalletState = {
 const DEF_CHAINID: ChainId = '1'
 
 export const state: StateFunction<WalletState> = (config) => {
-  const contracts = useModule(config, ContractsModule)
+  const contracts = useModule(config, Contracts)
 
   return {
     wallet: '',
