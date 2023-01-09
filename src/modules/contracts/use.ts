@@ -14,7 +14,7 @@ import type {
   ContractsJSONStruct,
   ContractsDefinition,
   ContractDefinition,
-  ContractsConfig,
+  ContractsParams,
 } from './type'
 
 import { logger } from './utils'
@@ -69,28 +69,28 @@ export const useContracts_config = <
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
   config: EvmConfig,
-  contractsConfig: ContractsConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts>
+  params: ContractsParams<ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   return (signer?: INotNullSigner) => {
-    if (!contractsConfig.DEFAULT_CHAINID) {
-      logger.warn('No `DEFAULT_CHAINID` in config')
+    if (!params.DEFAULT_CHAINID) {
+      logger.warn('No `DEFAULT_CHAINID` in "params"')
       return {} as UseContracts<Contracts['shared'], ChainIds[number]>
     }
 
-    const chainId = contractsConfig.DEFAULT_CHAINID // TODO: get actual chainId from web3 store like
+    const chainId = params.DEFAULT_CHAINID // TODO: get actual chainId from web3 store like
 
-    if (!contractsConfig.contractsJSON) {
-      logger.warn('No `contractsJSON` in config')
+    if (!params.contractsJSON) {
+      logger.warn('No `contractsJSON` in "params"')
       return {} as UseContracts<Contracts['shared'], ChainIds[number]>
     }
 
-    const contractsJSON = contractsConfig.contractsJSON
+    const contractsJSON = params.contractsJSON
     const allContracts = contractsJSON[chainId][0].contracts ?? {}
 
     return genContractObjects(
       config,
       chainId as ChainId,
-      contractsConfig.contracts?.shared ?? {},
+      params.contracts?.shared ?? {},
       allContracts,
       signer
     ) as UseContracts<Contracts['shared'], ChainIds[number]>
@@ -104,14 +104,14 @@ export const useContractsOnChain_config = <
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>
 >(
   config: EvmConfig,
-  contractsConfig: ContractsConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts>
+  params: ContractsParams<ContractsJSON, ChainIds, DefaultChainId, Contracts>
 ) => {
   return <CurrentChainId extends ChainIds[number]>(
     chainId: CurrentChainId,
     signer?: INotNullSigner
   ) => {
-    if (!contractsConfig.contractsJSON) {
-      logger.warn('No `contractsJSON` in config')
+    if (!params.contractsJSON) {
+      logger.warn('No `contractsJSON` in "params"')
       return {} as UseContracts<
         Cast<
           Contracts['on'][CurrentChainId],
@@ -121,13 +121,13 @@ export const useContractsOnChain_config = <
       >
     }
 
-    const contractsJSON = contractsConfig.contractsJSON
+    const contractsJSON = params.contractsJSON
     const allContracts = contractsJSON[chainId][0].contracts
 
     return genContractObjects(
       config,
       chainId as ChainId,
-      contractsConfig.contracts?.on[chainId] ??
+      params.contracts?.on[chainId] ??
         ({} as Record<string, ContractDefinition<any, any>>),
       allContracts,
       signer

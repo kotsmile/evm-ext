@@ -6,12 +6,12 @@ import type { EvmConfig } from '@/config/type'
 import { useModule } from '@/config/utils'
 import { ChainModule } from '@/modules'
 
-import type { ContractsConfig } from './type'
+import type { ContractsParams } from './type'
 
 export const contractType = <C>(): C => ({} as C)
 export const logger = createLogger('Contracts Module')
 
-export const getContracts = (config: EvmConfig, contractsConfig: ContractsConfig) => {
+export const getContracts = (config: EvmConfig, contractsConfig: ContractsParams) => {
   const contracts = contractsConfig.contractsJSON
   if (!contracts) return
 
@@ -38,7 +38,7 @@ export const getContracts = (config: EvmConfig, contractsConfig: ContractsConfig
   }
 }
 
-export const debugInfo = (config: EvmConfig, contractsConfig: ContractsConfig) => {
+export const debugInfo = (config: EvmConfig, contractsConfig: ContractsParams) => {
   const contractsAll = getContracts(config, contractsConfig)
   if (!contractsAll) return
 

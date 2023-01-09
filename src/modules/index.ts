@@ -1,25 +1,26 @@
-import ChainModule, { type ChainModuleConfig } from './chain'
-import ContractsModule, {
+import { ChainModule, type ChainParams } from './chain'
+import {
+  ContractsModule,
   type AppChainIds,
-  type ContractsConfig,
+  type ContractsParams,
   type ContractsDefinition,
   type ContractsJSONStruct,
 } from './contracts'
-import EventsModule from './events'
-import StoreModule, { type StoreModuleConfig } from './store'
-import WalletModule, { type WalletModuleConfig } from './wallet'
+import { EventsModule } from './events'
+import { StoreModule, type StoreParams } from './store'
+import { WalletModule, type WalletParams } from './wallet'
 
 export const defaultModules = <
   ContractsJSON extends ContractsJSONStruct,
   ChainIds extends AppChainIds<ContractsJSON>,
   DefaultChainId extends ChainIds[number],
   Contracts extends ContractsDefinition<ContractsJSON, ChainIds[number]>,
-  WalletConfig extends WalletModuleConfig
+  WP extends WalletParams
 >(config: {
-  chain: ChainModuleConfig
-  contracts: ContractsConfig<ContractsJSON, ChainIds, DefaultChainId, Contracts>
-  store: StoreModuleConfig
-  wallet: WalletConfig
+  chain: ChainParams
+  contracts: ContractsParams<ContractsJSON, ChainIds, DefaultChainId, Contracts>
+  store: StoreParams
+  wallet: WP
 }) =>
   ({
     ...EventsModule(),

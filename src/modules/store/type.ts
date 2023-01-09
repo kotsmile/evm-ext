@@ -12,6 +12,6 @@ export type StoreDefinition = {
 }
 export type StoresDefinition = Record<string, StoreDefinition>
 
-export type StoreModuleConfig = {
+export type StoreParams = {
   stores: StoresDefinition
 }

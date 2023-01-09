@@ -6,7 +6,7 @@ import type { ISigner } from '@/utils'
 import type { ChainId } from '@/utils/chain'
 
 import { events } from './utils'
-import type { WalletModuleConfig } from '../type'
+import type { WalletParams } from '../type'
 
 export type ConnectFunction = (
   wallet: string,
@@ -36,7 +36,7 @@ export abstract class WalletHandler {
 
   constructor(
     public config: EvmConfig,
-    public walletConfig: WalletModuleConfig,
+    public walletConfig: WalletParams,
     public chainIds: readonly ChainId[],
     public defaultChainId: ChainId,
     public updateStoreState: UpdateStoreStateFunction,

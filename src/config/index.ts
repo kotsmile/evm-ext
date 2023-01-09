@@ -11,9 +11,9 @@ export const defineEvmConfig = <
 >(
   config: EvmConfig<M, A>
 ) => {
-  if (config.DEBUG === false) disableLogger()
+  if (!config.DEBUG) disableLogger()
 
-  const tools = {} as {
+  const modulesTools = {} as {
     [K in keyof M]: RT<M[K]['tools']>
   }
 
@@ -23,7 +23,7 @@ export const defineEvmConfig = <
       const module = config.modules[moduleName]
       if (!module.tools) continue
       /// @ts-ignore
-      tools[moduleName] = module.tools(config)
+      modulesTools[moduleName] = module.tools(config)
     }
 
   return () => ({
@@ -33,25 +33,12 @@ export const defineEvmConfig = <
 
       logger.info('Init modules')
 
-      /// TODO same code :((
-      // not defered modules
-      for (const name of keyOf(config.modules)) {
-        const module = config.modules[name]
-        if (module.defer) continue
-        await module
-          .init?.(config)
-          .then((r) => {
-            if (!r) logger.error(`Cant init ${String(name)} module`)
-          })
-          .catch((e) => logger.error(`Cant init ${String(name)} module: ${e}`))
-      }
+      for (const name of keyOf(config.modules).sort(
+        (n1) => (config.modules?.[n1].defer ? 1 : -1) // defered modules at the end
+      )) {
+        logger.info(`Init ${String(name)}...`)
 
-      /// TODO same code :((
-      // defered modules
-      for (const name of keyOf(config.modules)) {
-        const module = config.modules[name]
-        if (!module.defer) continue
-        await module
+        await config.modules[name]
           .init?.(config)
           .then((r) => {
             if (!r) logger.error(`Cant init ${String(name)} module`)
@@ -60,7 +47,8 @@ export const defineEvmConfig = <
       }
     },
     config,
-    ...tools,
+    ...modulesTools,
+    /// TODO: make spread
     tools: config.adapter.tools?.(config) as A['tools'] extends undefined
       ? never
       : RT<A['tools']>,

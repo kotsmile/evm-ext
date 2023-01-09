@@ -9,7 +9,7 @@ describe('Events Module', () => {
     const useTestEvm = defineEvmConfig({
       DEBUG: false,
       modules: {
-        // ...EventsModule(),
+        ...EventsModule(),
         ...StoreModule({
           stores: {
             testStore: {

@@ -1,14 +1,14 @@
 import type { Module } from '@/config/type'
 
-import type { ChainModuleConfig } from './type'
+import type { ChainParams } from './type'
 import { getRpc_config, getProvider_config } from './node'
 
-export default (chainConfig: ChainModuleConfig) => ({
+export const ChainModule = (params: ChainParams) => ({
   chain: {
     tools: (config) => ({
-      getRpc: getRpc_config(config, chainConfig),
-      getProvider: getProvider_config(config, chainConfig),
-      getChainConfig: () => chainConfig,
+      getRpc: getRpc_config(config, params),
+      getProvider: getProvider_config(config, params),
+      getChainParams: () => params,
     }),
   } satisfies Module,
 })

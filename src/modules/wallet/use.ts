@@ -1,20 +1,20 @@
 import type { Bytes } from 'ethers'
 import type { EvmConfig } from '@/config/type'
 
-import { safeRead, unwrapState, wrapState } from '@/utils'
-import type { ChainId, Cast } from '@/utils'
+import { safeRead, unwrapState, wrapState, type ChainId, type Cast } from '@/utils'
 
 import { useModule } from '@/config/utils'
 import { ContractsModule, EventsModule } from '@/modules'
 
-import type { UpdateParams } from './wallets/base'
 import { logger } from './utils'
-import type { WalletModuleConfig } from './type'
 import { useWalletState } from './state'
 
-export const useWallet_config = <WC extends WalletModuleConfig>(
+import type { UpdateParams } from './wallets/base'
+import type { WalletParams } from './type'
+
+export const useWallet_config = <WP extends WalletParams>(
   config: EvmConfig,
-  walletConfig: WC
+  params: WP
 ) => {
   return {
     async updateStoreState({ wallet, chainId, signer, login = true }: UpdateParams) {
@@ -28,10 +28,10 @@ export const useWallet_config = <WC extends WalletModuleConfig>(
       walletState.login = login
     },
     async connect(
-      walletType: Cast<keyof WC['wallets'] | null, string>,
+      walletType: Cast<keyof WP['wallets'] | null, string>,
       chainId?: ChainId
     ) {
-      const { wallets } = walletConfig
+      const { wallets } = params
       if (!wallets) return logger.warn('No wallets provided')
       if (!walletType) return
 
@@ -46,17 +46,17 @@ export const useWallet_config = <WC extends WalletModuleConfig>(
 
       const walletHandler = new wallets[walletType](
         config,
-        walletConfig,
-        (contracts?.getContractsConfig().chainIds as ChainId[]) ?? [],
+        params,
+        (contracts?.getContractsParams().chainIds as ChainId[]) ?? [],
         walletState.chainId,
         this.updateStoreState,
         (wallet) => {
           events.useEvents().emit('onWalletChange', { wallet })
-          if (walletConfig.options?.updateOnWalletChange) this.loadAll({ login: true })
+          if (params.options?.updateOnWalletChange) this.loadAll({ login: true })
         },
         (chainId) => {
           events.useEvents().emit('onChainChange', { chainId, natural: true })
-          if (walletConfig.options?.updateOnChainChange)
+          if (params.options?.updateOnChainChange)
             this.loadAll({ init: true, login: true })
         }
       )

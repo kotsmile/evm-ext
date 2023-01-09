@@ -50,7 +50,7 @@ export type ContractsDefinition<
   shared: ContractsDefinitionShared<ContractsJSON, ChainId>
   on: ContractsDefinitionOnChain<ContractsJSON, ChainId>
 }
-export type ContractsConfig<
+export type ContractsParams<
   ContractsJSON extends ContractsJSONStruct = ContractsJSONStruct,
   ChainIds extends AppChainIds<ContractsJSON> = any,
   DefaultChainId extends ChainIds[number] = any,

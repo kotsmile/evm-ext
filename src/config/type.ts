@@ -1,17 +1,10 @@
 import type { AdapterDefinition } from '@/adapter'
 
-import type {
-  AppChainIds,
-  ContractsDefinition,
-  ContractsJSONStruct,
-} from '@/modules/contracts'
-
 export type EvmConfig<
   Modules extends Record<string, Module> = Record<string, Module>,
   Adapter extends AdapterDefinition = AdapterDefinition
 > = {
   DEBUG?: boolean
-
   readonly adapter: Adapter
   readonly modules?: Modules
 }

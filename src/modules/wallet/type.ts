@@ -12,7 +12,7 @@ export type Options = {
 
 export type WalletsDefintion = Record<string, RemoveAbstract<typeof WalletHandler>>
 
-export type WalletModuleConfig = {
+export type WalletParams = {
   wallets: WalletsDefintion
   options: Options
 }

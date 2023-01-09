@@ -4,7 +4,7 @@ import type { EvmConfig, StateFunction } from '@/config/type'
 
 import type { WalletHandler } from './wallets/base'
 import { useModule } from '@/config/utils'
-import contractsModule from '@/modules/contracts'
+import { ContractsModule } from '@/modules'
 
 export type WalletState = {
   wallet: string
@@ -22,16 +22,16 @@ export type WalletState = {
 const DEF_CHAINID: ChainId = '1'
 
 export const state: StateFunction<WalletState> = (config) => {
-  const contracts = useModule(config, contractsModule)
+  const contracts = useModule(config, ContractsModule)
 
   return {
     wallet: '',
     signer: wrapState(null),
-    chainId: (contracts.getContractsConfig().DEFAULT_CHAINID as ChainId) ?? DEF_CHAINID,
+    chainId: (contracts.getContractsParams().DEFAULT_CHAINID as ChainId) ?? DEF_CHAINID,
     realChainId: DEF_CHAINID,
-    chainIds: (contracts.getContractsConfig().chainIds as ChainId[]) ?? [DEF_CHAINID],
+    chainIds: (contracts.getContractsParams().chainIds as ChainId[]) ?? [DEF_CHAINID],
     DEFAULT_CHAINID:
-      (contracts.getContractsConfig().DEFAULT_CHAINID as ChainId) ?? DEF_CHAINID,
+      (contracts.getContractsParams().DEFAULT_CHAINID as ChainId) ?? DEF_CHAINID,
     login: false,
     loading: false,
     walletType: null,

@@ -4,14 +4,14 @@ import { entries } from '@/utils'
 import { useModule } from '@/config/utils'
 import { EventsModule } from '@/modules'
 
-import { storeLifecycles, StoreModuleConfig } from './type'
+import { storeLifecycles, StoreParams } from './type'
 import { logger, onLifecycle } from './utils'
 
-export default (storeConfig: StoreModuleConfig) => ({
+export const StoreModule = (params: StoreParams) => ({
   store: {
     init: async (config) => {
       try {
-        const { stores } = storeConfig
+        const { stores } = params
 
         const events = useModule(config, EventsModule)
         const eventsTools = events.useEvents()
@@ -34,7 +34,7 @@ export default (storeConfig: StoreModuleConfig) => ({
       return true
     },
     tools: () => ({
-      getStoreConfig: () => storeConfig,
+      getStoreParams: () => params,
     }),
   } satisfies Module,
 })

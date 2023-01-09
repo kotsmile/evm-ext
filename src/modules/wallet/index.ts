@@ -1,4 +1,4 @@
-import type { WalletModuleConfig } from './type'
+import type { WalletParams } from './type'
 
 import type { ChainId } from '@/utils/chain'
 
@@ -11,12 +11,12 @@ import type { Module } from '@/config/type'
 import { useModule } from '@/config/utils'
 import { ContractsModule } from '@/modules'
 
-export const walletModule = <WC extends WalletModuleConfig>(walletConfig: WC) => ({
+export const WalletModule = <WP extends WalletParams>(params: WP) => ({
   wallet: {
     tools: (config) => ({
-      useWallet: () => useWallet_config<WC>(config, walletConfig),
+      useWallet: () => useWallet_config<WP>(config, params),
       useWalletState: () => useWalletState(config),
-      getWalletConfig: () => walletConfig,
+      getWalletConfig: () => params,
     }),
     init: async (config) => {
       try {
@@ -25,9 +25,9 @@ export const walletModule = <WC extends WalletModuleConfig>(walletConfig: WC) =>
 
         const wallet = useWalletState(config)
 
-        wallet.chainId = wallet.DEFAULT_CHAINID = contracts.getContractsConfig()
+        wallet.chainId = wallet.DEFAULT_CHAINID = contracts.getContractsParams()
           .DEFAULT_CHAINID as ChainId
-        wallet.chainIds = contracts.getContractsConfig().chainIds as ChainId[]
+        wallet.chainIds = contracts.getContractsParams().chainIds as ChainId[]
       } catch (e) {
         logger.error(e)
         return false
@@ -37,8 +37,6 @@ export const walletModule = <WC extends WalletModuleConfig>(walletConfig: WC) =>
     },
   } satisfies Module,
 })
-
-export default walletModule
 
 export * from './wallets/base'
 export * from './wallets/utils'
