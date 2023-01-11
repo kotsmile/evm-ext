@@ -1,7 +1,7 @@
 import type { AdapterDefinition } from '@/adapter'
 
 export type EvmContext<
-  Modules extends Record<string, Module> = Record<string, Module>,
+  Modules extends Record<string, ModuleType> = Record<string, ModuleType>,
   Adapter extends AdapterDefinition = AdapterDefinition
 > = {
   DEBUG?: boolean
@@ -14,9 +14,10 @@ export type ToolsFunction = (ctx: EvmContext) => Record<string, any>
 
 export type StateFunction<S extends Record<string, any> = any> = (ctx: EvmContext) => S
 
-export type Module = {
+export type ModuleType = {
   tools?: ToolsFunction
   init?: InitFunction
   defer?: boolean
+  deps?: Readonly<string[]>
 }
-export type ModuleDefinition = Record<string, Module>
+export type ModuleDefinition = Record<string, ModuleType>

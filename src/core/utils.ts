@@ -1,27 +1,51 @@
-import { createLogger, keyOf } from '@/utils'
-import type { RT } from '@/utils/type'
-import type { EvmContext, Module } from './type'
+import type { F } from 'ts-toolbelt'
 
-export const logger = createLogger('Config')
+import { createLogger, keyOf, EVMError, type RT } from '@/utils'
 
-export const getModuleName = <Name extends string, M extends Module>(
+import type { EvmContext, ModuleType } from './type'
+
+export const logger = createLogger('Core')
+
+export const getModuleName = <Name extends string, M extends ModuleType>(
   module: (...args: any[]) => Record<Name, M>
 ) => {
   const initedModule = module()
   return keyOf(initedModule)[0]
 }
 
-export const useModule = <Name extends string, M extends Module>(
+export const useModule = <Name extends string, M extends ModuleType>(
   ctx: EvmContext,
   module: (...args: any[]) => Record<Name, M>
 ) => {
   const name = getModuleName(module)
 
-  if (!ctx.modules) throw new Error(`Not found module "${name}"`)
+  if (!ctx.modules) throw new EVMError(`Not found module "${name}"`)
 
   if (name in ctx.modules) {
     return ctx.modules[name].tools?.(ctx) as RT<M['tools']>
   } else {
-    throw new Error(`Not found module "${name}"`)
+    throw new EVMError(`Not found module "${name}"`)
   }
+}
+
+export const useModuleSafe = <Name extends string, M extends ModuleType>(
+  ctx: EvmContext,
+  module: (...args: any[]) => Record<Name, M>
+) => {
+  try {
+    return useModule(ctx, module)
+  } catch (e) {
+    logger.warn(`Not found module "${name}"`)
+    return null
+  }
+}
+
+export const Module = <N extends string, D extends string[], M extends ModuleType>(
+  name: N,
+  module: M,
+  deps?: F.Narrow<D>
+) => {
+  return {
+    [name]: { ...module, deps },
+  } as Record<N, M & { deps: D }>
 }

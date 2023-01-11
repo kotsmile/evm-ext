@@ -4,6 +4,7 @@ export * from './chain/type'
 export * from './safe'
 export * from './address'
 export * from './type'
+export * from './error'
 
 export const keyOf = <O extends Record<string | number | symbol, any>>(o: O) => {
   return Object.keys(o) as (keyof O)[]

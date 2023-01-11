@@ -3,7 +3,7 @@ import type { EvmContext } from '@/core/type'
 
 import { safeRead, unwrapState, wrapState, type ChainId, type Cast } from '@/utils'
 
-import { useModule } from '@/core/utils'
+import { useModule, useModuleSafe } from '@/core/utils'
 import { Contracts, Events } from '@/modules'
 
 import { logger } from './utils'
@@ -39,7 +39,7 @@ export const useWallet_ctx = <WP extends WalletParams>(ctx: EvmContext, params: 
       if (whClass) whClass?.clear()
 
       const contracts = useModule(ctx, Contracts)
-      const events = useModule(ctx, Events)
+      const events = useModuleSafe(ctx, Events)
 
       const walletHandler = new wallets[walletType](
         ctx,
@@ -48,11 +48,11 @@ export const useWallet_ctx = <WP extends WalletParams>(ctx: EvmContext, params: 
         walletState.chainId,
         this.updateStoreState,
         (wallet) => {
-          events.useEvents().emit('onWalletChange', { wallet })
+          events?.useEvents().emit('onWalletChange', { wallet })
           if (params.options?.updateOnWalletChange) this.loadAll({ login: true })
         },
         (chainId) => {
-          events.useEvents().emit('onChainChange', { chainId, natural: true })
+          events?.useEvents().emit('onChainChange', { chainId, natural: true })
           if (params.options?.updateOnChainChange)
             this.loadAll({ init: true, login: true })
         }
@@ -66,7 +66,9 @@ export const useWallet_ctx = <WP extends WalletParams>(ctx: EvmContext, params: 
       await this.loadAll({ init: true, login: true })
     },
     async loadAll({ init = true, login = true }: { init?: boolean; login?: boolean }) {
-      const events = useModule(ctx, Events)
+      const events = useModuleSafe(ctx, Events)
+      if (!events) return
+
       const eventsActions = events.useEvents()
 
       if (init) await eventsActions.emit('init', {})
@@ -87,32 +89,32 @@ export const useWallet_ctx = <WP extends WalletParams>(ctx: EvmContext, params: 
       return null
     },
     async switchChain(chainId: ChainId): Promise<boolean> {
-      const events = useModule(ctx, Events)
-      const eventsActions = events.useEvents()
+      const events = useModuleSafe(ctx, Events)
+      const eventsActions = events?.useEvents()
 
       const walletState = useWalletState(ctx)
 
       const result = Boolean(
         await unwrapState(walletState.walletHandler)?.switchChain(chainId)
       )
-      if (result) eventsActions.emit('onChainChange', { chainId, natural: false })
+      if (result) eventsActions?.emit('onChainChange', { chainId, natural: false })
       return result
     },
     async disconnect(): Promise<boolean> {
-      const events = useModule(ctx, Events)
-      const eventsActions = events.useEvents()
+      const events = useModuleSafe(ctx, Events)
+      const eventsActions = events?.useEvents()
 
       // const { _emit } = useEvents(ctx)
       const walletState = useWalletState(ctx)
 
-      await eventsActions._emit('beforeLogout', {})
+      await eventsActions?._emit('beforeLogout', {})
       walletState.login = false
       walletState.wallet = ''
-      await eventsActions._emit('logout', {})
+      await eventsActions?._emit('logout', {})
 
       // setPreservedConnection(this.walletType, false)
 
-      await eventsActions._emit('afterLogout', {})
+      await eventsActions?._emit('afterLogout', {})
       return Boolean(await unwrapState(walletState.walletHandler)?.disconnect())
     },
   }

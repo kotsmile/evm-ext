@@ -1,11 +1,11 @@
-import type { Module } from '@/core/type'
+import { Module } from '@/core'
 
 import { useEventsState } from './state'
 import { useEvents_ctx } from './use'
 import { logger } from './utils'
 
-export const Events = () => ({
-  events: {
+export const Events = () =>
+  Module('events', {
     tools: (ctx) => ({
       useEvents: () => useEvents_ctx(ctx),
       useEventsState: () => useEventsState(ctx),
@@ -22,8 +22,7 @@ export const Events = () => ({
       return true
     },
     defer: true,
-  } satisfies Module,
-})
+  })
 
 export * from './state'
 export * from './type'

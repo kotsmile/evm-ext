@@ -1,11 +1,20 @@
 import type { AdapterDefinition } from '@/adapter'
-import type { EvmContext, Module, ToolsFunction } from '@/core/type'
+import type { EvmContext, ModuleType } from '@/core/type'
 import { logger } from '@/core/utils'
 
 import { disableLogger, keyOf } from '@/utils'
+import { EVMError } from '@/utils/error'
 import type { RT } from '@/utils/type'
 
-export const defineEvm = <M extends Record<string, Module>, A extends AdapterDefinition>(
+type DependecyOk<M extends Record<string, ModuleType>> = Extract<
+  Exclude<M[keyof M]['deps'], undefined>[number],
+  keyof M
+>
+
+export const defineEvm = <
+  M extends Record<string, ModuleType>,
+  A extends AdapterDefinition
+>(
   ctx: EvmContext<M, A>
 ) => {
   if (!ctx.DEBUG) disableLogger()
@@ -14,15 +23,30 @@ export const defineEvm = <M extends Record<string, Module>, A extends AdapterDef
     [K in keyof M]: RT<M[K]['tools']>
   }
 
-  // init tools
-  if (ctx.modules)
+  if (ctx.modules) {
+    /// dependency check
+    let problems = 0
+    for (const name of keyOf(ctx.modules)) {
+      const deps = ctx.modules[name].deps
+      if (deps && deps.length > 0) {
+        for (const dep of deps) {
+          if (ctx.modules[dep as keyof typeof ctx.modules]) continue
+          problems++
+          logger.error(`Module "${String(name)}" requiers module "${dep}"`)
+        }
+      }
+    }
+    if (problems > 0) throw new EVMError('Dependency problems')
+
+    // init tools
     for (const moduleName of keyOf(ctx.modules)) {
       const { tools } = ctx.modules[moduleName]
       if (!tools) continue
       modulesTools[moduleName] = tools(ctx) as any
     }
+  }
 
-  return () => ({
+  const use = () => ({
     /// inits every module
     init: async () => {
       if (!ctx.modules) return
@@ -48,7 +72,11 @@ export const defineEvm = <M extends Record<string, Module>, A extends AdapterDef
     tools: ctx.adapter.tools?.(ctx) as A['tools'] extends undefined
       ? never
       : RT<A['tools']>,
+    d: {} as DependecyOk<M>,
   })
+
+  type F = DependecyOk<M> extends never ? typeof use : never
+  return use as F
 }
 
 export * from './type'

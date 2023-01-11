@@ -1,5 +1,5 @@
 import type { AdapterDefinition } from '@/adapter'
-import { defineEvm } from '@/core'
+import { defineEvm, ModuleType } from '@/core'
 import { mockAdapter, mockState } from '@/mocks'
 
 import { Events, Store } from '@/modules'

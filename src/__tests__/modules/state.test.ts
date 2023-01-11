@@ -2,7 +2,8 @@ import { expect } from 'chai'
 
 import { defineEvm } from '@/core'
 import { mockState, mockAdapter } from '@/mocks'
-import { Wallet, Contracts } from '@/modules'
+import { Wallet, Contracts, Chain } from '@/modules'
+import { ankrRpc } from '@/utils'
 
 const useTestEvm = defineEvm({
   modules: {
@@ -11,6 +12,7 @@ const useTestEvm = defineEvm({
       options: {},
     }),
     ...Contracts({}),
+    ...Chain(ankrRpc()),
   },
   adapter: mockAdapter,
   DEBUG: false,
@@ -18,7 +20,7 @@ const useTestEvm = defineEvm({
 
 describe('State module', () => {
   it('should set value', () => {
-    const { wallet } = useTestEvm()
+    const { wallet, d } = useTestEvm()
 
     const k = 'wallet'
     const v = '0xtest1'
